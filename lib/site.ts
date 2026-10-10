@@ -20,7 +20,7 @@ export const defaults = {
   poweredBy: 'RX Direct',
   poweredByUrl: 'https://rxdirect.pk',
   gaId: '',
-  gscVerification: '',
+  gscVerification: 'NFmmn0NzU-UPKpUkxHzfm7mDhGRkVvEhBXGuz3RZzR0',
 };
 export type SettingKey = keyof typeof defaults;
 
