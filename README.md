@@ -30,17 +30,17 @@ HireCook runs like the other Next.js sites on this server:
 
 | What | Where |
 | --- | --- |
-| Code |  (owned by user ) |
-| Settings (phone, WhatsApp, admin key) |  |
-| Saved hire requests |  |
-| Service |  on  (copy in ) |
-| Nginx |  (copy in ) |
+| Code | `/var/www/hirecook/current` (owned by user `hirecook`) |
+| Settings (phone, WhatsApp, admin key) | `/etc/hirecook/hirecook.env` |
+| Saved hire requests | `/var/lib/hirecook/leads.jsonl` |
+| Service | systemd `hirecook.service` on `127.0.0.1:3104` (copy in `deploy/hirecook.service`) |
+| Nginx | `/etc/nginx/sites-available/hirecook.pk` (copy in `deploy/nginx-hirecook.pk.conf`) |
 
-To redeploy after pushing changes, run as root: . The  values are compiled in, so redeploy after editing the env file.
+To redeploy after pushing changes, run as root: `bash /var/www/hirecook/current/deploy/deploy.sh`. The `NEXT_PUBLIC_*` values are compiled in, so redeploy after editing the env file.
 
-For optional auto-deploy on every push, add the GitHub secrets ,  and .
+For optional auto-deploy on every push, add the GitHub secrets `VPS_HOST`, `VPS_USER` and `VPS_SSH_KEY`.
 
-**DNS:**  uses Cloudflare. Its  records for  and  must point to . SSL comes from Let's Encrypt: .
+**DNS:** `hirecook.pk` uses Cloudflare. Its `A` records for `@` and `www` must point to `72.62.193.221`. SSL comes from Let's Encrypt: `certbot --nginx -d hirecook.pk -d www.hirecook.pk --redirect`.
 
 ## After launch
 
