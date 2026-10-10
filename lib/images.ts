@@ -1,0 +1,43 @@
+// Photo library: free-licence photos from Unsplash (https://unsplash.com/license), self-hosted
+// in /public/images/photos and served responsively through next/image (AVIF/WebP).
+export const photos = {
+  'hero-chef': 'Male chef in uniform and green apron cooking a fresh meal in a home kitchen',
+  'male-chef': 'Male cook preparing food in a clean professional kitchen',
+  'chef-herb': 'Private chef garnishing a plated dish with fresh herbs',
+  'chef-chopping': 'Chef in white coat chopping vegetables on a cutting board',
+  'restaurant-chefs': 'Team of restaurant chefs cooking in a commercial kitchen',
+  'busy-kitchen': 'Cook working at the stove in a busy kitchen',
+  'hotel-chef': 'Smiling hotel chef in a white chef jacket',
+  'chef-hat-cooking': 'Executive chef in a chef hat cooking at the pass',
+  biryani: 'Plate of Pakistani chicken biryani with raita and salad',
+  'biryani-platter': 'Large platter of biryani served for a family dawat',
+  karahi: 'Chicken karahi cooking in a traditional wok',
+  'desi-curry': 'Desi curry served in clay pots',
+  'desi-spread': 'Pakistani desi food spread with curries, rice and naan',
+  bbq: 'BBQ platter with seekh kebab, chicken tikka and grilled vegetables',
+  'bbq-tray': 'Freshly grilled BBQ meat on a serving tray',
+  tandoor: 'Cook baking fresh naan in a traditional tandoor',
+  roti: 'Fresh roti and naan served with daal and salan',
+  chinese: 'Chinese stir-fried noodles with vegetables',
+  continental: 'Continental dishes served on white plates',
+  pizza: 'Pizza baking in a wood-fired oven',
+  bakery: 'Baker dusting flour over freshly baked bread',
+  pastry: 'Croissants and pastries on a wooden board',
+  'meal-prep': 'Healthy meal prep boxes with rice, vegetables and lentils',
+  healthy: 'Fresh healthy diet ingredients on a chopping board',
+  buffet: 'Catering buffet with chafing dishes',
+  'wedding-buffet': 'Wedding buffet table with a variety of dishes',
+  'party-table': 'Party food served on a long table',
+  'family-dinner': 'Family enjoying a home-cooked dinner together',
+  'office-meals': 'Office lunch boxes with balanced meals',
+  islamabad: 'Faisal Mosque with the Margalla Hills, Islamabad',
+  'islamabad-aerial': 'Aerial view of Islamabad housing and towers',
+  'islamabad-night': 'Faisal Mosque illuminated at night in Islamabad',
+  rawalpindi: 'Historic architecture in Rawalpindi',
+  dough: 'Cook kneading dough in a stainless steel bowl',
+  kitchen: 'Clean commercial kitchen with stainless steel equipment',
+  rice: 'Desi thali with rice, curry and sides',
+} as const;
+
+export type PhotoKey = keyof typeof photos;
+export const photoSrc = (k: PhotoKey) => `/images/photos/${k}.jpg`;
