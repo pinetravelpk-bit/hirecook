@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { CheckCircle2, Loader2, Send } from 'lucide-react';
 import WaIcon from './WaIcon';
-import { site } from '@/lib/site';
+import { useSite } from './SiteContext';
 import { areas } from '@/lib/areas';
 
 const cookTypes = ['Home cook', 'Male cook', 'Full-time cook', 'Part-time cook', 'Live-in cook', 'Private / personal chef', 'Desi / Pakistani food cook', 'BBQ / tandoor cook', 'Chinese / continental chef', 'Bakery / pastry chef', 'Diet / meal prep chef', 'Restaurant / hotel chef', 'Office / canteen / mess cook', 'Event / wedding / dawat cook'];
@@ -12,6 +12,7 @@ const schedules = ['Full-time', 'Part-time', 'Live-in', 'Live-out', 'Morning', '
 type Props = { service?: string; city?: string; area?: string; compact?: boolean; id?: string };
 
 export default function HireForm({ service = '', city: city0 = 'Islamabad', area: area0 = '', compact, id = 'hire-form' }: Props) {
+  const site = useSite();
   const [city, setCity] = useState(city0.includes('Rawalpindi') ? 'Rawalpindi' : 'Islamabad');
   const [area, setArea] = useState(area0);
   const [type, setType] = useState(service);
@@ -31,7 +32,7 @@ export default function HireForm({ service = '', city: city0 = 'Islamabad', area
     const data = Object.fromEntries(fd.entries()) as Record<string, string>;
     data.city = city;
     data.page = window.location.pathname;
-    const text = `Assalam o Alaikum HireCook.pk, I want to hire a cook.\nName: ${data.name}\nPhone: ${data.phone}\nCity/Area: ${data.area}, ${city}\nCook needed: ${data.service}\nSchedule: ${data.schedule}\nFamily size / guests: ${data.people || '-'}\nBudget: ${data.budget || '-'}\nStart: ${data.start || '-'}\nDetails: ${data.notes || '-'}`;
+    const text = `Assalam o Alaikum HireCook.pk, I want to hire a cook.\nName: ${data.name}\nPhone: ${data.phone}\nCity/Area: ${data.area}, ${city}\nCook needed: ${data.service}\nSchedule: ${data.schedule}\nFamily size / guests: ${data.people || '-'}\nTimings: ${data.budget || '-'}\nStart: ${data.start || '-'}\nDetails: ${data.notes || '-'}`;
     setSummary(text);
     setState('sending');
     try {
@@ -98,7 +99,7 @@ export default function HireForm({ service = '', city: city0 = 'Islamabad', area
             </div>
             <div className="form-grid">
               <label className="field">Family size / guests<input name="people" inputMode="numeric" placeholder="e.g. 5 people" /></label>
-              <label className="field">Monthly budget (PKR)<input name="budget" inputMode="numeric" placeholder="e.g. 40,000" /></label>
+              <label className="field">Preferred timings<input name="budget" placeholder="e.g. 9am – 6pm" /></label>
             </div>
             {!compact && <label className="field">Start date<input name="start" type="date" /></label>}
             <label className="field">Cuisine &amp; details<textarea name="notes" rows={compact ? 2 : 3} placeholder="Desi, BBQ, Chinese… timings, accommodation, special diets" /></label>

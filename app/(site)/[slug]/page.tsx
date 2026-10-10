@@ -10,10 +10,12 @@ import HireForm from '@/components/HireForm';
 import JsonLd from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import WaIcon from '@/components/WaIcon';
-import { DayDonut, SalaryBars, HiringTimeline } from '@/components/Infographics';
+import { DayDonut, HiringTimeline } from '@/components/Infographics';
+import { TrustRings } from '@/components/Coverage';
+import Registrations from '@/components/Registrations';
 import { entries, bySlug, buildPage, related, groups, groupSlug, areaEntry, titleCase } from '@/lib/content';
 import { areas, islamabadAreas, rawalpindiAreas } from '@/lib/areas';
-import { site, salaryGuide } from '@/lib/site';
+import { site } from '@/lib/site';
 import { breadcrumbSchema, faqSchema, howToSchema, servicePageSchema } from '@/lib/schema';
 import { photoSrc } from '@/lib/images';
 
@@ -51,7 +53,6 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
     { name: p.H1, path: `/${e.slug}` },
   ];
   const rel = related(e, 8);
-  const salaryIdx = salaryGuide.indexOf(p.salary);
   const isArea = !!p.area && p.area.name !== 'Rawalpindi';
   const nearbyLinks = isArea
     ? p.area!.nearby.map((n) => areas.find((a) => a.name === n && a.city === p.area!.city) || areas.find((a) => a.name === n)).filter(Boolean).map((a) => ({ a: a!, e: areaEntry(a!.name, a!.city) })).filter((x) => x.e)
@@ -79,7 +80,7 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
           <div className="trust">
             <span><ShieldCheck size={17} /> Screened cooks</span>
             <span><Clock3 size={17} /> 24–48h shortlist</span>
-            <span><Wallet size={17} /> From PKR {Math.round(p.salary.min / 1000)}k/month</span>
+            <span><Wallet size={17} /> Trial cook first</span>
           </div>
         </div>
         <div className="media">
@@ -148,7 +149,7 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
           </div>
           <div className="info-grid">
             <Reveal><DayDonut title={p.dayTitle} items={p.day} /></Reveal>
-            <Reveal delay={0.1}><SalaryBars rows={salaryGuide} highlight={salaryIdx} title={`${titleCase(p.who)} salary vs other cooks (PKR / month)`} /></Reveal>
+            <Reveal delay={0.1}><TrustRings title={`Every ${p.who} is checked 4 ways`} /></Reveal>
           </div>
           <div style={{ marginTop: 20 }}><Reveal><HiringTimeline /></Reveal></div>
         </div>
@@ -172,6 +173,8 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
           })}
         </div>
       </section>
+
+      <Registrations />
 
       {/* LOCAL */}
       <section className="wrap section" style={{ paddingTop: 0 }}>

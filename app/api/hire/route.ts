@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
-import { appendFile, mkdir } from 'node:fs/promises';
-import path from 'node:path';
+import { db } from '@/lib/db';
 
 export const runtime = 'nodejs';
 
-const DATA_DIR = process.env.LEADS_DIR || path.join(process.cwd(), 'data');
 const hits = new Map<string, number[]>();
 
 function clean(v: unknown, max = 500) {
@@ -45,10 +43,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: 'Invalid name or phone' }, { status: 400 });
   }
 
-  await mkdir(DATA_DIR, { recursive: true });
-  await appendFile(path.join(DATA_DIR, 'leads.jsonl'), JSON.stringify(lead) + '\n', 'utf8');
+  db().prepare('INSERT INTO leads (name, phone, city, area, service, schedule, people, budget, start, notes, page, ip) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)').run(lead.name, lead.phone, lead.city, lead.area, lead.service, lead.schedule, lead.people, lead.budget, lead.start, lead.notes, lead.page, lead.ip);
 
-  const text = `New cook request (HireCook.pk)\n${lead.name} · ${lead.phone}\n${lead.service} · ${lead.schedule}\n${lead.area}, ${lead.city}\nPeople: ${lead.people} · Budget: ${lead.budget} · Start: ${lead.start}\n${lead.notes}\nPage: ${lead.page}`;
+  const text = `New cook request (HireCook.pk)\n${lead.name} · ${lead.phone}\n${lead.service} · ${lead.schedule}\n${lead.area}, ${lead.city}\nPeople: ${lead.people} · Timings: ${lead.budget} · Start: ${lead.start}\n${lead.notes}\nPage: ${lead.page}`;
 
   // Optional email notification (set SMTP_* env vars).
   if (process.env.SMTP_HOST && process.env.LEADS_EMAIL_TO) {

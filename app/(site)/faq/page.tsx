@@ -24,8 +24,8 @@ const sections: { h: string; items: { q: string; a: string }[] }[] = [
     { q: 'Can the cook make Chinese and continental food?', a: 'Yes. Tell us the dishes you want and we match a cook or chef with that experience: Chinese, continental, BBQ, baking, diet food and more.' },
     { q: 'Do you provide cooks for restaurants and offices?', a: 'Yes: restaurant and hotel chefs, office and canteen cooks, mess and hostel cooks, guest house cooks and event chefs.' },
   ] },
-  { h: 'Salary & terms', items: [
-    { q: 'How much does a cook cost?', a: 'Indicatively PKR 18k–35k part-time, PKR 30k–55k full-time, PKR 35k–65k live-in, and PKR 50k–250k for specialist, private and restaurant chefs per month.' },
+  { h: 'Terms & registration', items: [
+    { q: 'Is HireCook.pk registered?', a: 'Yes. We are registered with SECP, FBR (NTN), the Labour Department and PESSI (Punjab Employees Social Security Institution).' },
     { q: 'Is there an agency fee?', a: 'Our service charges depend on the role and arrangement. We explain all fees clearly before you confirm. No hidden costs.' },
     { q: 'What if the cook leaves or does not suit us?', a: 'Inform us within the agreed period and we help arrange a replacement candidate.' },
   ] },

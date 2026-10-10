@@ -1,4 +1,4 @@
-import { site } from './site';
+import { site, registrations } from './site';
 import { areas } from './areas';
 import type { Page } from './content';
 import { photoSrc } from './images';
@@ -17,9 +17,9 @@ export function orgSchema() {
       url: site.url,
       logo: `${site.url}/icon-512.png`,
       email: site.email,
-      telephone: site.phone,
+      telephone: site.phoneIntl,
       sameAs: site.social,
-      contactPoint: [{ '@type': 'ContactPoint', telephone: site.phone, contactType: 'customer service', areaServed: 'PK', availableLanguage: ['English', 'Urdu'] }],
+      contactPoint: [{ '@type': 'ContactPoint', telephone: site.phoneIntl, contactType: 'customer service', areaServed: 'PK', availableLanguage: ['English', 'Urdu'] }],
     },
     {
       '@context': 'https://schema.org',
@@ -30,9 +30,8 @@ export function orgSchema() {
       url: site.url,
       image: `${site.url}${photoSrc('hero-chef')}`,
       logo: `${site.url}/icon-512.png`,
-      telephone: site.phone,
+      telephone: site.phoneIntl,
       email: site.email,
-      priceRange: site.priceRange,
       parentOrganization: { '@id': ORG_ID },
       address: { '@type': 'PostalAddress', streetAddress: site.address.street, addressLocality: site.address.locality, addressRegion: site.address.region, postalCode: site.address.postalCode, addressCountry: site.address.country },
       geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
@@ -42,8 +41,9 @@ export function orgSchema() {
         { '@type': 'City', name: 'Rawalpindi', sameAs: 'https://en.wikipedia.org/wiki/Rawalpindi' },
         ...areas.filter((a) => a.name !== 'Rawalpindi').map((a) => ({ '@type': 'Place', name: `${a.name}, ${a.city}` })),
       ],
+      hasCredential: registrationsSchema(),
       knowsAbout: ['Home cook hiring', 'Male cooks', 'Private chefs', 'Live-in cooks', 'Pakistani cuisine', 'BBQ', 'Catering', 'Restaurant staffing'],
-      hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('HireCook.pk Islamabad')}`,
+      hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('HireCook.pk ' + site.addressLine)}`,
     },
     {
       '@context': 'https://schema.org',
@@ -84,7 +84,7 @@ export function howToSchema(name: string) {
       { '@type': 'HowToStep', position: 1, name: 'Share your requirements', text: 'Send your area, cuisine, family size, timings and budget via WhatsApp, call or the online hire form.' },
       { '@type': 'HowToStep', position: 2, name: 'Get a shortlist', text: 'HireCook.pk shortlists screened cooks who match your needs, usually within 24–48 hours.' },
       { '@type': 'HowToStep', position: 3, name: 'Interview and trial cook', text: 'Meet the cook and take a trial cook in your own kitchen.' },
-      { '@type': 'HowToStep', position: 4, name: 'Hire with clear terms', text: 'Agree salary, duties, off days and notice period in writing, then the cook starts.' },
+      { '@type': 'HowToStep', position: 4, name: 'Hire with clear terms', text: 'Agree duties, timings, off days and notice period in writing, then the cook starts.' },
     ],
   };
 }
@@ -105,7 +105,7 @@ export function servicePageSchema(p: Page) {
       areaServed: p.area && p.area.name !== 'Rawalpindi'
         ? { '@type': 'Place', name: `${p.area.name}, ${p.area.city}`, containedInPlace: { '@type': 'City', name: p.area.city } }
         : p.city.includes('&') ? [{ '@type': 'City', name: 'Islamabad' }, { '@type': 'City', name: 'Rawalpindi' }] : { '@type': 'City', name: p.city },
-      offers: { '@type': 'Offer', priceCurrency: 'PKR', priceSpecification: { '@type': 'UnitPriceSpecification', minPrice: p.salary.min, maxPrice: p.salary.max, priceCurrency: 'PKR', unitText: 'MONTH' }, availability: 'https://schema.org/InStock' },
+      offers: { '@type': 'Offer', availability: 'https://schema.org/InStock', areaServed: p.city },
     },
     {
       '@context': 'https://schema.org',
@@ -122,4 +122,8 @@ export function servicePageSchema(p: Page) {
       speakable: { '@type': 'SpeakableSpecification', cssSelector: ['.quick-answer', 'h1'] },
     },
   ];
+}
+
+function registrationsSchema() {
+  return registrations.map((r) => ({ '@type': 'EducationalOccupationalCredential', name: r.title, recognizedBy: { '@type': 'GovernmentOrganization', name: r.sub } }));
 }

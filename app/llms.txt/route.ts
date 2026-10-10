@@ -1,5 +1,5 @@
 import { entries, groups, titleCase, buildPage } from '@/lib/content';
-import { site, salaryGuide } from '@/lib/site';
+import { site, registrations } from '@/lib/site';
 
 export const dynamic = 'force-static';
 
@@ -12,6 +12,7 @@ export function GET() {
     '',
     '## Key facts',
     `- Business: ${site.name}, cook & chef hiring agency`,
+    `- Office: ${site.addressLine}, Pakistan`,
     `- Service area: Islamabad and Rawalpindi, Pakistan (66 sectors, societies and neighbourhoods)`,
     `- Phone / WhatsApp: ${site.phone}`,
     `- Email: ${site.email}`,
@@ -19,13 +20,12 @@ export function GET() {
     '- Process: share requirements → shortlist in 24–48 hours → trial cook at home → hire with written terms',
     '- Screening: CNIC details, previous-employer references, practical trial cook',
     '',
-    '## Indicative monthly cook salaries (PKR, 2026)',
-    ...salaryGuide.map((s) => `- ${s.role}: ${s.min.toLocaleString('en-PK')}–${s.max.toLocaleString('en-PK')}`),
+    '## Registrations',
+    ...registrations.map((r) => `- ${r.title} (${r.sub})`),
     '',
     '## Main pages',
     `- [Hire a cook](${site.url}/hire): online hiring request form`,
     `- [All services](${site.url}/services)`,
-    `- [Cook salary guide](${site.url}/salary-guide)`,
     `- [How it works](${site.url}/how-it-works)`,
     `- [FAQs](${site.url}/faq)`,
     `- [Contact](${site.url}/contact)`,

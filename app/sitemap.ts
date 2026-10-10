@@ -5,7 +5,7 @@ import { photoSrc } from '@/lib/images';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const fixed = ['', '/hire', '/services', '/salary-guide', '/how-it-works', '/faq', '/about', '/contact'].map((p) => ({
+  const fixed = ['', '/hire', '/services', '/how-it-works', '/faq', '/about', '/contact'].map((p) => ({
     url: site.url + p,
     lastModified: now,
     changeFrequency: 'weekly' as const,

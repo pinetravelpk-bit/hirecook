@@ -20,7 +20,7 @@ export default function manifest(): MetadataRoute.Manifest {
     shortcuts: [
       { name: 'Hire a cook', url: '/hire' },
       { name: 'All services', url: '/services' },
-      { name: 'Salary guide', url: '/salary-guide' },
+      { name: 'Contact', url: '/contact' },
     ],
   };
 }

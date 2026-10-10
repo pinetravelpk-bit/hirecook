@@ -27,6 +27,7 @@ const nextConfig: NextConfig = {
     return [
       { source: '/services/:slug', destination: '/:slug', permanent: true },
       { source: '/directory', destination: '/services', permanent: true },
+      { source: '/salary-guide', destination: '/how-it-works', permanent: true },
     ];
   },
 };

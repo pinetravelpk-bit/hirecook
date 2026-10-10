@@ -3,10 +3,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Phone, ChefHat, LayoutGrid } from 'lucide-react';
 import WaIcon from './WaIcon';
-import { site } from '@/lib/site';
+import { useSite } from './SiteContext';
 
 // Sticky mobile app dock: Call, WhatsApp and Hire Cook are always one tap away.
 export default function Dock() {
+  const site = useSite();
   const path = usePathname();
   const track = (name: string) => {
     const w = window as unknown as { gtag?: (...a: unknown[]) => void };

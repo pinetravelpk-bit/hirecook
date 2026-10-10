@@ -16,7 +16,7 @@ const steps = [
   ['Share your requirements', 'WhatsApp, call or use the online form. Tell us your area, cuisine, family size, timings, budget and whether you need full-time, part-time, live-in or live-out.'],
   ['We shortlist screened cooks', 'We match cooks by skills, experience and distance from your home, check CNIC details and references, and share profiles usually within 24–48 hours.'],
   ['Interview and trial cook', 'Speak to the cook, then arrange a trial cook in your own kitchen so you can taste their food and see how they work.'],
-  ['Hire with clear terms', 'Agree salary, duties, working hours, off-days and notice period in writing. We stay in touch after placement and help with a replacement if needed.'],
+  ['Hire with clear terms', 'Agree duties, working hours, off-days and notice period in writing. We stay in touch after placement and help with a replacement if needed.'],
 ];
 
 export default function HowItWorks() {

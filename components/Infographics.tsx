@@ -58,36 +58,6 @@ export function DayDonut({ title, items }: { title: string; items: { label: stri
   );
 }
 
-/** Animated range bars for indicative monthly salary. */
-export function SalaryBars({ rows, highlight, title = 'Cook salary in Islamabad & Rawalpindi (PKR / month)' }: { rows: { role: string; min: number; max: number }[]; highlight?: number; title?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
-  const top = Math.max(...rows.map((r) => r.max));
-  const k = (n: number) => `${Math.round(n / 1000)}k`;
-  return (
-    <div className="info-card" ref={ref}>
-      <h3>{title}</h3>
-      <p className="muted">Indicative 2026 ranges. Final salary depends on experience, hours and duties.</p>
-      <div className="bars">
-        {rows.map((r, i) => (
-          <div className={'bar-row' + (i === highlight ? ' hl' : '')} key={r.role}>
-            <div className="lbl"><span>{r.role}</span><span>PKR {k(r.min)} – {k(r.max)}</span></div>
-            <div className="bar-track">
-              <motion.div
-                className="bar-fill"
-                style={{ left: `${(r.min / top) * 100}%` }}
-                initial={{ width: 0 }}
-                animate={inView ? { width: `${((r.max - r.min) / top) * 100}%` } : {}}
-                transition={{ duration: 1, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /** Animated hiring timeline. */
 export function HiringTimeline() {
   const ref = useRef<HTMLDivElement>(null);

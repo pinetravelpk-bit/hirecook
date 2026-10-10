@@ -9,8 +9,10 @@ import Cta from '@/components/Cta';
 import HireForm from '@/components/HireForm';
 import JsonLd from '@/components/JsonLd';
 import WaIcon from '@/components/WaIcon';
-import { DayDonut, SalaryBars, HiringTimeline, CoverageBars } from '@/components/Infographics';
-import { site, stats, salaryGuide } from '@/lib/site';
+import { DayDonut, HiringTimeline, CoverageBars } from '@/components/Infographics';
+import { CoverageMap, TrustRings } from '@/components/Coverage';
+import Registrations from '@/components/Registrations';
+import { site, stats } from '@/lib/site';
 import { islamabadAreas, rawalpindiAreas } from '@/lib/areas';
 import { entries, groups, areaEntry } from '@/lib/content';
 import { faqSchema, howToSchema } from '@/lib/schema';
@@ -25,7 +27,7 @@ const services: [string, string, string, PhotoKey][] = [
   ['Restaurant Chef', 'Line cooks & chefs for restaurants and cafés.', 'hire-restaurant-chef-islamabad', 'restaurant-chefs'],
   ['Office Cook', 'Fresh staff lunches, canteens and messes.', 'hire-office-cook-islamabad', 'office-meals'],
   ['Event & Catering Chef', 'Weddings, parties, birthdays and dawats.', 'hire-catering-chef-islamabad', 'buffet'],
-  ['Full-Time Cook', 'Dedicated cook on a monthly salary.', 'full-time-cook-islamabad', 'chef-chopping'],
+  ['Full-Time Cook', 'Dedicated cook for all daily meals.', 'full-time-cook-islamabad', 'chef-chopping'],
   ['Part-Time Cook', 'Lunch & dinner in 2–5 hours a day.', 'part-time-cook-islamabad', 'dough'],
   ['Live-In Cook', 'Resident cook with accommodation.', 'live-in-cook-islamabad', 'busy-kitchen'],
 ];
@@ -46,7 +48,7 @@ const cuisines: [string, string, PhotoKey][] = [
 
 const homeFaqs = [
   { q: 'How can I hire a cook in Islamabad?', a: `Call or WhatsApp HireCook.pk on ${site.phone}, or fill in the online hire form. Share your area, cuisine, family size, timings and budget. We shortlist screened cooks within 24–48 hours, arrange a trial cook at your home, and you hire only when you are satisfied.` },
-  { q: 'What is the salary of a cook in Islamabad in 2026?', a: 'Indicative monthly salaries: part-time cook PKR 18k–35k, full-time home cook PKR 30k–55k, live-in cook PKR 35k–65k, continental or Chinese chef PKR 50k–120k, private chef PKR 70k–180k. Final salary depends on experience, hours and duties.' },
+  { q: 'Is HireCook.pk a registered agency?', a: 'Yes. HireCook.pk is registered with SECP, holds an FBR tax registration (NTN), and is registered with the Labour Department and PESSI (Punjab Employees Social Security Institution).' },
   { q: 'Can I hire a male cook for my home?', a: 'Yes. Most of our home cooks are experienced male cooks who prepare daily desi food, roti, BBQ and dawat menus. You can choose full-time, part-time, live-in or live-out.' },
   { q: 'Do you provide cooks in Rawalpindi too?', a: 'Yes. We cover Saddar, Satellite Town, Chaklala, all Bahria Town phases, DHA, Askari societies, Westridge, Adiala Road and more across Rawalpindi.' },
   { q: 'Are your cooks verified?', a: 'We collect CNIC details and previous-employer references before introducing a cook, and you take a trial cook before hiring. For live-in staff we also recommend police verification through ICT Police or Punjab Police.' },
@@ -130,7 +132,7 @@ export default function Home() {
           <ul className="ticks">
             <li><BadgeCheck size={18} /> Desi, BBQ, Chinese &amp; continental specialists</li>
             <li><BadgeCheck size={18} /> Full-time, part-time, live-in &amp; live-out</li>
-            <li><BadgeCheck size={18} /> Written salary, duties and off-days</li>
+            <li><BadgeCheck size={18} /> Written duties, timings and off-days</li>
           </ul>
           <Link className="btn btn-primary" href="/c/male-cooks">Hire a Male Cook <ArrowRight size={18} /></Link>
         </Reveal>
@@ -147,6 +149,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <Registrations />
 
       {/* CUISINES */}
       <section className="wrap section" style={{ paddingTop: 0 }}>
@@ -172,14 +176,15 @@ export default function Home() {
           <div className="center" style={{ marginBottom: 30 }}>
             <p className="eyebrow">Hiring at a glance</p>
             <h2>Know before you hire.</h2>
-            <p className="lead">Salaries, schedules and the hiring journey, in four quick visuals.</p>
+            <p className="lead">Our checks, schedules, coverage and the hiring journey at a glance.</p>
           </div>
           <div className="info-grid">
             <Reveal><HiringTimeline /></Reveal>
             <Reveal delay={0.1}><DayDonut title="A full-time cook's day" items={[{ label: 'Breakfast', h: 1.5 }, { label: 'Lunch', h: 2.5 }, { label: 'Tea & snacks', h: 1 }, { label: 'Dinner', h: 2.5 }, { label: 'Kitchen & groceries', h: 1.5 }]} /></Reveal>
-            <Reveal><SalaryBars rows={salaryGuide} highlight={1} /></Reveal>
+            <Reveal><TrustRings /></Reveal>
             <Reveal delay={0.1}><CoverageBars rows={groups.map((g) => ({ label: g.title.replace(' in Islamabad', ''), value: countBy(g.name) })).sort((a, b) => b.value - a.value)} /></Reveal>
           </div>
+          <div style={{ marginTop: 20 }}><Reveal><CoverageMap /></Reveal></div>
         </div>
       </section>
 
@@ -231,7 +236,7 @@ export default function Home() {
           <h2>Good food starts with a simple process.</h2>
         </div>
         <div className="steps">
-          {[[ClipboardList, 'Tell us your needs', 'Share your city, area, cook type, cuisine, timings and budget.'], [Users, 'Meet suitable cooks', 'Get a shortlist of screened cooks, usually within 24–48 hours.'], [CookingPot, 'Trial cook at home', 'Taste the food in your own kitchen before deciding.'], [UserCheck, 'Hire with clear terms', 'Agree salary, duties and off-days in writing. Done.']].map(([I, t, d], i) => {
+          {[[ClipboardList, 'Tell us your needs', 'Share your city, area, cook type, cuisine and timings.'], [Users, 'Meet suitable cooks', 'Get a shortlist of screened cooks, usually within 24–48 hours.'], [CookingPot, 'Trial cook at home', 'Taste the food in your own kitchen before deciding.'], [UserCheck, 'Hire with clear terms', 'Agree duties, timings and off-days in writing. Done.']].map(([I, t, d], i) => {
             const Icon = I as typeof ClipboardList;
             return (
               <Reveal className="step" key={String(t)} delay={i * 0.1}>

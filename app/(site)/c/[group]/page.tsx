@@ -58,7 +58,7 @@ export default async function GroupPage({ params }: { params: Promise<{ group: s
                 <div className="media"><Photo k={p.image} sizes="(max-width: 820px) 100vw, 25vw" alt={p.H1} /></div>
                 <div className="body">
                   <h3 style={{ fontSize: 18 }}>{p.H1}</h3>
-                  <p>{p.area && p.area.name !== 'Rawalpindi' ? `${p.area.kind[0].toUpperCase() + p.area.kind.slice(1)} · ${p.area.city}` : `${p.sched ? p.sched.label + ' · ' : ''}From PKR ${Math.round(p.salary.min / 1000)}k / month`}</p>
+                  <p>{p.area && p.area.name !== 'Rawalpindi' ? `${p.area.kind[0].toUpperCase() + p.area.kind.slice(1)} · ${p.area.city}` : `${p.sched ? p.sched.label + ' · ' : ''}Screened cooks · Trial first`}</p>
                   <span className="more">View service <ArrowRight size={15} /></span>
                 </div>
               </Link>

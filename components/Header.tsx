@@ -6,14 +6,13 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Menu, X, Phone, MapPin, Clock, ChefHat, Users, CalendarClock, UtensilsCrossed, Building2, PartyPopper, ArrowRight, Landmark, ArrowUpRight } from 'lucide-react';
 import Brand from './Brand';
 import WaIcon from './WaIcon';
-import { site } from '@/lib/site';
+import { useSite } from './SiteContext';
 
 const nav = [
   { href: '/services', label: 'Cook Services' },
   { href: '/c/chefs-and-cuisines', label: 'Cuisines' },
   { href: '/c/islamabad-areas', label: 'Islamabad' },
   { href: '/c/rawalpindi-areas', label: 'Rawalpindi' },
-  { href: '/salary-guide', label: 'Salary Guide' },
   { href: '/how-it-works', label: 'How It Works' },
 ];
 
@@ -27,6 +26,7 @@ const sheetCats = [
 ];
 
 export default function Header() {
+  const site = useSite();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const path = usePathname();
@@ -52,7 +52,7 @@ export default function Header() {
         <div className="wrap">
           <span><MapPin size={13} aria-hidden /> Cook hiring agency in Islamabad &amp; Rawalpindi</span>
           <span className="tb-right">
-            <span><Clock size={13} aria-hidden /> {site.hours.label}</span>
+            <span><Clock size={13} aria-hidden /> {site.hoursLabel}</span>
             <a href={site.phoneHref}><Phone size={13} aria-hidden /> {site.phone}</a>
           </span>
         </div>
@@ -113,7 +113,6 @@ export default function Header() {
               <h4>More</h4>
               <div className="sheet-list">
                 <Link href="/services"><span>All cook services</span><ArrowRight size={16} /></Link>
-                <Link href="/salary-guide"><span>Cook salary guide 2026</span><ArrowRight size={16} /></Link>
                 <Link href="/how-it-works"><span>How it works</span><ArrowRight size={16} /></Link>
                 <Link href="/faq"><span>FAQs</span><ArrowRight size={16} /></Link>
                 <Link href="/about"><span>About us</span><ArrowRight size={16} /></Link>

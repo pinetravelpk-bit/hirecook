@@ -16,7 +16,7 @@ export default function Footer() {
             <div className="foot-list">
               <a href={site.phoneHref}><Phone size={14} aria-hidden /> {site.phone}</a>
               <a href={`mailto:${site.email}`}><Mail size={14} aria-hidden /> {site.email}</a>
-              <span><MapPin size={14} aria-hidden /> {site.address.street}, {site.address.locality}, Pakistan</span>
+              <span><MapPin size={14} aria-hidden /> {site.addressLine}, Pakistan</span>
               <span><Clock size={14} aria-hidden /> {site.hours.label}</span>
             </div>
           </div>
@@ -37,7 +37,6 @@ export default function Footer() {
             <div className="foot-list">
               <Link href="/about">About HireCook.pk</Link>
               <Link href="/how-it-works">How it works</Link>
-              <Link href="/salary-guide">Cook salary guide</Link>
               <Link href="/faq">FAQs</Link>
               <Link href="/contact">Contact</Link>
               <Link href="/hire">Hire a cook</Link>
@@ -54,7 +53,7 @@ export default function Footer() {
         </div>
         <div className="foot-bottom">
           <span>© {new Date().getFullYear()} {site.name}. Cook &amp; chef hiring in Islamabad and Rawalpindi.</span>
-          <span>Photos: Unsplash</span>
+          <span className="powered">Powered by <a href={site.poweredBy.url} target="_blank" rel="noopener">{site.poweredBy.name}</a></span>
         </div>
       </div>
     </footer>
