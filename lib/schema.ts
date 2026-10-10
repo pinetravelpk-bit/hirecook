@@ -1,5 +1,6 @@
 import { site, registrations } from './site';
 import { areas } from './areas';
+import { outsideCities } from './cities';
 import type { Page } from './content';
 import { photoSrc } from './images';
 
@@ -39,7 +40,8 @@ export function orgSchema() {
       areaServed: [
         { '@type': 'City', name: 'Islamabad', sameAs: 'https://en.wikipedia.org/wiki/Islamabad' },
         { '@type': 'City', name: 'Rawalpindi', sameAs: 'https://en.wikipedia.org/wiki/Rawalpindi' },
-        ...areas.filter((a) => a.name !== 'Rawalpindi').map((a) => ({ '@type': 'Place', name: `${a.name}, ${a.city}` })),
+        ...outsideCities.map((c) => ({ '@type': 'City', name: c.name })),
+        ...areas.filter((a) => a.name !== a.city).map((a) => ({ '@type': 'Place', name: `${a.name}, ${a.city}` })),
       ],
       hasCredential: registrationsSchema(),
       knowsAbout: ['Home cook hiring', 'Male cooks', 'Private chefs', 'Live-in cooks', 'Pakistani cuisine', 'BBQ', 'Catering', 'Restaurant staffing'],
@@ -102,7 +104,7 @@ export function servicePageSchema(p: Page) {
       url,
       image: `${site.url}${photoSrc(p.image)}`,
       provider: { '@id': BIZ_ID },
-      areaServed: p.area && p.area.name !== 'Rawalpindi'
+      areaServed: p.isArea && p.area
         ? { '@type': 'Place', name: `${p.area.name}, ${p.area.city}`, containedInPlace: { '@type': 'City', name: p.area.city } }
         : p.city.includes('&') ? [{ '@type': 'City', name: 'Islamabad' }, { '@type': 'City', name: 'Rawalpindi' }] : { '@type': 'City', name: p.city },
       offers: { '@type': 'Offer', availability: 'https://schema.org/InStock', areaServed: p.city },

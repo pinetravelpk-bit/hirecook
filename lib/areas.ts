@@ -1,6 +1,8 @@
+import { cityAreas, cityNames } from './cities';
+
 export type Area = {
   name: string;
-  city: 'Islamabad' | 'Rawalpindi';
+  city: string;
   kind: string;
   blurb: string;
   landmarks: string[];
@@ -9,7 +11,7 @@ export type Area = {
 };
 
 // Local context for each neighbourhood. `nearby` names match other area names for internal linking.
-export const areas: Area[] = [
+const twinCityAreas: Area[] = [
   // ---------- ISLAMABAD ----------
   { name: 'F-6', city: 'Islamabad', kind: 'sector', blurb: 'F-6 (Shalimar) is one of Islamabad’s oldest and most central sectors, home to Super Market, embassies nearby and many large family houses where full-time and live-in cooks are common.', landmarks: ['Super Market', 'Kohsar Market', 'Margalla Road'], nearby: ['F-7', 'G-6', 'E-7'], homes: 'large family homes, diplomatic residences and upper-portion rentals' },
   { name: 'F-7', city: 'Islamabad', kind: 'sector', blurb: 'F-7 (Jinnah Super) is a busy, upscale residential sector where families often hire experienced cooks for daily desi meals and frequent dawats.', landmarks: ['Jinnah Super Market', 'Gol Market', 'Fatima Jinnah Park (F-9) nearby'], nearby: ['F-6', 'F-8', 'E-7'], homes: 'bungalows, family houses and guest-entertaining households' },
@@ -81,11 +83,24 @@ export const areas: Area[] = [
   { name: 'Morgah', city: 'Rawalpindi', kind: 'neighbourhood', blurb: 'Morgah, home to the Attock Refinery colony and nearby societies, has families who hire male cooks for daily home meals.', landmarks: ['Attock Refinery', 'Morgah Biodiversity Park', 'Adiala Road'], nearby: ['Adiala Road', 'Peshawar Road', 'Bahria Town Phase 8'], homes: 'colony homes and family houses' },
 ];
 
+// Areas in other cities (male cooks only) come from lib/cities.ts.
+export const areas: Area[] = [
+  ...twinCityAreas,
+  ...Object.entries(cityAreas).flatMap(([city, list]) =>
+    list.map(([name, kind, blurb, landmarks, nearby, homes]) => ({ name, city, kind, blurb, landmarks, nearby, homes })),
+  ),
+];
+
+export function detectCity(keyword: string) {
+  const k = keyword.toLowerCase();
+  return cityNames.find((c) => k.includes(c.toLowerCase())) || 'Islamabad';
+}
+
 export function findArea(keyword: string): Area | undefined {
   const k = keyword.toLowerCase();
-  const city = k.includes('rawalpindi') ? 'Rawalpindi' : 'Islamabad';
+  const city = detectCity(keyword);
   // Longest name match first to avoid "Bahria Town" matching "Bahria Town Phase 7".
-  const sorted = [...areas].filter((a) => a.name !== 'Rawalpindi').sort((a, b) => b.name.length - a.name.length);
+  const sorted = [...areas].filter((a) => a.name !== a.city).sort((a, b) => b.name.length - a.name.length);
   const m = sorted.find((a) => a.city === city && new RegExp(`\\b${a.name.toLowerCase().replace(/[-]/g, '\\-')}\\b`).test(k));
   if (m) return m;
   if (k === 'hire cook in rawalpindi') return areas.find((a) => a.name === 'Rawalpindi');
@@ -94,3 +109,5 @@ export function findArea(keyword: string): Area | undefined {
 
 export const islamabadAreas = areas.filter((a) => a.city === 'Islamabad');
 export const rawalpindiAreas = areas.filter((a) => a.city === 'Rawalpindi' && a.name !== 'Rawalpindi');
+
+export const areasOf = (city: string) => areas.filter((a) => a.city === city && a.name !== city);

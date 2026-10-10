@@ -53,7 +53,7 @@ export const site = {
   url: 'https://hirecook.pk',
   tagline: 'Hire Trusted Cooks & Chefs in Islamabad and Rawalpindi',
   description:
-    'HireCook.pk is a cook hiring agency in Islamabad and Rawalpindi. Hire male home cooks, full-time, part-time and live-in cooks, private chefs, desi, BBQ, Chinese and continental chefs, plus restaurant, office and event cooks.',
+    'HireCook.pk is a cook hiring agency. In Islamabad and Rawalpindi hire male home cooks, full-time, part-time and live-in cooks, private chefs, desi, BBQ, Chinese and continental chefs, plus restaurant, office and event cooks. Male cooks are also available in Karachi, Lahore, Faisalabad, Gujranwala, Peshawar, Multan, Hyderabad and Quetta.',
   get phone() { return getSettings().phone; },
   get phoneIntl() { return phoneToHref(getSettings().phone).replace('tel:', ''); },
   get phoneHref() { return phoneToHref(getSettings().phone); },

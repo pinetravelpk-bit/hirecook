@@ -196,7 +196,7 @@ strong { color: var(--ink); }
 .footer a { color: #c8d4cb; font-size: 14px; }
 .footer a:hover { color: #fff; }
 .footer p { color: #9fb1a6; }
-.foot-grid { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 30px; }
+.foot-grid { display: grid; grid-template-columns: 1.4fr repeat(5, 1fr); gap: 26px; }
 .foot-list { display: grid; gap: 8px; }
 .foot-bottom { border-top: 1px solid #23463a; margin-top: 40px; padding-top: 20px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 13px; }
 .kw-cloud { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 30px; font-size: 12.5px; }
@@ -442,3 +442,13 @@ html.js [data-reveal]:not([data-in]) { opacity: 0; transform: translateY(26px); 
   .rings { grid-template-columns: repeat(2, 1fr); row-gap: 20px; }
   .reg-grid.scroller { grid-auto-columns: 70%; }
 }
+
+/* Male-cooks-only notice for cities outside Islamabad / Rawalpindi */
+.scope-note { display: flex; gap: 10px; align-items: flex-start; background: var(--green-soft); color: var(--green); border-radius: 14px; padding: 12px 14px; margin: 14px 0 0; font-weight: 600; font-size: 14.5px; }
+.scope-note svg { flex: none; margin-top: 3px; }
+.city-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.city-card .media { aspect-ratio: 4/3; }
+.city-card .tag { position: absolute; left: 12px; bottom: 12px; z-index: 1; background: var(--orange); color: #fff; font-size: 11.5px; font-weight: 800; border-radius: 999px; padding: 4px 10px; }
+.city-card .tag.full { background: var(--green); }
+@media (max-width: 1080px) { .city-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 820px) { .city-grid.scroller { grid-auto-columns: 62%; } }

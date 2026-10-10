@@ -13,6 +13,7 @@ const nav = [
   { href: '/c/chefs-and-cuisines', label: 'Cuisines' },
   { href: '/c/islamabad-areas', label: 'Islamabad' },
   { href: '/c/rawalpindi-areas', label: 'Rawalpindi' },
+  { href: '/cities', label: 'Other Cities' },
   { href: '/how-it-works', label: 'How It Works' },
 ];
 
@@ -50,7 +51,7 @@ export default function Header() {
     <>
       <div className="topbar">
         <div className="wrap">
-          <span><MapPin size={13} aria-hidden /> Cook hiring agency in Islamabad &amp; Rawalpindi</span>
+          <span><MapPin size={13} aria-hidden /> Cook hiring in Islamabad &amp; Rawalpindi · Male cooks in 8 more cities</span>
           <span className="tb-right">
             <span><Clock size={13} aria-hidden /> {site.hoursLabel}</span>
             <a href={site.phoneHref}><Phone size={13} aria-hidden /> {site.phone}</a>
@@ -109,6 +110,7 @@ export default function Header() {
               <div className="sheet-list">
                 <Link href="/c/islamabad-areas"><span><Landmark size={16} aria-hidden /> Islamabad sectors &amp; societies</span><ArrowRight size={16} /></Link>
                 <Link href="/c/rawalpindi-areas"><span><Landmark size={16} aria-hidden /> Rawalpindi areas</span><ArrowRight size={16} /></Link>
+                <Link href="/cities"><span><MapPin size={16} aria-hidden /> Male cooks in 8 more cities</span><ArrowRight size={16} /></Link>
               </div>
               <h4>More</h4>
               <div className="sheet-list">

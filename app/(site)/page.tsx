@@ -12,9 +12,12 @@ import WaIcon from '@/components/WaIcon';
 import { DayDonut, HiringTimeline, CoverageBars } from '@/components/Infographics';
 import { CoverageMap, TrustRings } from '@/components/Coverage';
 import Registrations from '@/components/Registrations';
-import { site, stats } from '@/lib/site';
+import { site } from '@/lib/site';
+import { areas } from '@/lib/areas';
+import { cities } from '@/lib/cities';
+import CityGrid from '@/components/CityGrid';
 import { islamabadAreas, rawalpindiAreas } from '@/lib/areas';
-import { entries, groups, areaEntry } from '@/lib/content';
+import { entries, groups, coreGroups, areaEntry } from '@/lib/content';
 import { faqSchema, howToSchema } from '@/lib/schema';
 import type { PhotoKey } from '@/lib/images';
 import type { Metadata } from 'next';
@@ -57,6 +60,12 @@ const homeFaqs = [
 
 export default function Home() {
   const countBy = (g: string) => entries.filter((e) => e.group === g).length;
+  const stats = [
+    { value: entries.length, suffix: '+', label: 'Cook services & local pages' },
+    { value: areas.filter((a) => a.name !== a.city).length, suffix: '', label: 'Areas covered' },
+    { value: cities.length, suffix: '', label: 'Cities across Pakistan' },
+    { value: 48, suffix: 'h', label: 'Typical shortlist time' },
+  ];
   return (
     <main id="main">
       <JsonLd data={[faqSchema(homeFaqs), howToSchema('How to hire a cook in Islamabad')]} />
@@ -68,7 +77,7 @@ export default function Home() {
           <div className="hero-copy">
             <p className="eyebrow">Home · Restaurant · Office · Events</p>
             <h1>Hire a Cook in Islamabad <span className="accent">&amp; Rawalpindi.</span></h1>
-            <p className="lead">The right cook for every kitchen. Hire screened <strong>male cooks</strong>, home cooks and professional chefs. Full-time, part-time or live-in, with a trial cook before you decide.</p>
+            <p className="lead">The right cook for every kitchen. Hire screened <strong>male cooks</strong>, home cooks and professional chefs. Full-time, part-time or live-in, with a trial cook before you decide. <strong>Male cooks</strong> now also in Karachi, Lahore and 6 more cities.</p>
             <div className="actions">
               <Link className="btn btn-primary" href="/hire">Find My Cook <ArrowRight size={18} /></Link>
               <a className="btn btn-wa" href={site.whatsappHref()} target="_blank" rel="noopener"><WaIcon size={18} /> WhatsApp Us</a>
@@ -182,7 +191,7 @@ export default function Home() {
             <Reveal><HiringTimeline /></Reveal>
             <Reveal delay={0.1}><DayDonut title="A full-time cook's day" items={[{ label: 'Breakfast', h: 1.5 }, { label: 'Lunch', h: 2.5 }, { label: 'Tea & snacks', h: 1 }, { label: 'Dinner', h: 2.5 }, { label: 'Kitchen & groceries', h: 1.5 }]} /></Reveal>
             <Reveal><TrustRings /></Reveal>
-            <Reveal delay={0.1}><CoverageBars rows={groups.map((g) => ({ label: g.title.replace(' in Islamabad', ''), value: countBy(g.name) })).sort((a, b) => b.value - a.value)} /></Reveal>
+            <Reveal delay={0.1}><CoverageBars rows={coreGroups.map((g) => ({ label: g.title.replace(' in Islamabad', ''), value: countBy(g.name) })).sort((a, b) => b.value - a.value)} /></Reveal>
           </div>
           <div style={{ marginTop: 20 }}><Reveal><CoverageMap /></Reveal></div>
         </div>
@@ -214,6 +223,16 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* PAKISTAN */}
+      <section className="wrap section" id="cities">
+        <div className="head-row">
+          <div><p className="eyebrow">Across Pakistan</p><h2>Male cooks in 8 more cities.</h2></div>
+          <p>Every cook service in Islamabad &amp; Rawalpindi, and experienced male cooks in Karachi, Lahore, Faisalabad, Gujranwala, Peshawar, Multan, Hyderabad and Quetta.</p>
+        </div>
+        <CityGrid only="outside" />
+        <p style={{ marginTop: 18 }}><Link className="link-arrow" href="/cities">All 10 cities and areas <ArrowRight size={16} /></Link></p>
       </section>
 
       {/* LOCAL FEATURED */}

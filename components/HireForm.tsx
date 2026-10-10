@@ -5,15 +5,17 @@ import { CheckCircle2, Loader2, Send } from 'lucide-react';
 import WaIcon from './WaIcon';
 import { useSite } from './SiteContext';
 import { areas } from '@/lib/areas';
+import { cities, isFullService } from '@/lib/cities';
 
 const cookTypes = ['Home cook', 'Male cook', 'Full-time cook', 'Part-time cook', 'Live-in cook', 'Private / personal chef', 'Desi / Pakistani food cook', 'BBQ / tandoor cook', 'Chinese / continental chef', 'Bakery / pastry chef', 'Diet / meal prep chef', 'Restaurant / hotel chef', 'Office / canteen / mess cook', 'Event / wedding / dawat cook'];
+const maleTypes = ['Male home cook', 'Full-time male cook', 'Part-time male cook', 'Live-in male cook', 'Live-out male cook'];
 const schedules = ['Full-time', 'Part-time', 'Live-in', 'Live-out', 'Morning', 'Evening', 'Weekend', 'One-off event'];
 
 type Props = { service?: string; city?: string; area?: string; compact?: boolean; id?: string };
 
 export default function HireForm({ service = '', city: city0 = 'Islamabad', area: area0 = '', compact, id = 'hire-form' }: Props) {
   const site = useSite();
-  const [city, setCity] = useState(city0.includes('Rawalpindi') ? 'Rawalpindi' : 'Islamabad');
+  const [city, setCity] = useState(cities.some((c) => c.name === city0) ? city0 : city0.includes('Rawalpindi') ? 'Rawalpindi' : 'Islamabad');
   const [area, setArea] = useState(area0);
   const [type, setType] = useState(service);
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
@@ -21,7 +23,8 @@ export default function HireForm({ service = '', city: city0 = 'Islamabad', area
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
-    if (p.get('city')) setCity(p.get('city')!.includes('Rawalpindi') ? 'Rawalpindi' : 'Islamabad');
+    const pc = p.get('city');
+    if (pc && cities.some((c) => c.name === pc)) setCity(pc);
     if (p.get('area')) setArea(p.get('area')!);
     if (p.get('service') || p.get('type')) setType(p.get('service') || p.get('type')!);
   }, []);
@@ -71,22 +74,20 @@ export default function HireForm({ service = '', city: city0 = 'Islamabad', area
               <label className="field">Your name<input name="name" required autoComplete="name" placeholder="Full name" /></label>
               <label className="field">Phone / WhatsApp<input name="phone" required type="tel" inputMode="tel" autoComplete="tel" placeholder="03XX XXXXXXX" pattern="[0-9+\-\s]{10,16}" /></label>
             </div>
-            <div className="field">
-              City
-              <div className="seg" role="radiogroup" aria-label="City">
-                {['Islamabad', 'Rawalpindi'].map((c) => (
-                  <label key={c}><input type="radio" name="cityR" value={c} checked={city === c} onChange={() => setCity(c)} /><span>{c}</span></label>
-                ))}
-              </div>
-            </div>
+            <label className="field">City
+              <select value={city} onChange={(e) => setCity(e.target.value)}>
+                {cities.map((c) => <option key={c.name} value={c.name}>{c.name}{c.full ? '' : ' (male cooks)'}</option>)}
+              </select>
+            </label>
+            {!isFullService(city) && <p className="scope-note" style={{ margin: 0 }}>In {city} we currently provide male cooks only: home, full-time, part-time and live-in.</p>}
             <div className="form-grid">
               <label className="field">Area / sector / society
-                <input name="area" required list={id + '-areas'} value={area} onChange={(e) => setArea(e.target.value)} placeholder="e.g. F-10, Bahria Phase 7" />
+                <input name="area" required list={id + '-areas'} value={area} onChange={(e) => setArea(e.target.value)} placeholder={isFullService(city) ? 'e.g. F-10, Bahria Phase 7' : 'Your area / society'} />
                 <datalist id={id + '-areas'}>{cityAreas.map((a) => <option key={a.name} value={a.name} />)}</datalist>
               </label>
               <label className="field">Cook needed
                 <input name="service" required list={id + '-types'} value={type} onChange={(e) => setType(e.target.value)} placeholder="e.g. Male home cook" />
-                <datalist id={id + '-types'}>{cookTypes.map((t) => <option key={t} value={t} />)}</datalist>
+                <datalist id={id + '-types'}>{(isFullService(city) ? cookTypes : maleTypes).map((t) => <option key={t} value={t} />)}</datalist>
               </label>
             </div>
             <div className="field">

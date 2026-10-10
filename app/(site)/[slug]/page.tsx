@@ -14,7 +14,7 @@ import { DayDonut, HiringTimeline } from '@/components/Infographics';
 import { TrustRings } from '@/components/Coverage';
 import Registrations from '@/components/Registrations';
 import { entries, bySlug, buildPage, related, groups, groupSlug, areaEntry, titleCase } from '@/lib/content';
-import { areas, islamabadAreas, rawalpindiAreas } from '@/lib/areas';
+import { areas, areasOf } from '@/lib/areas';
 import { site } from '@/lib/site';
 import { breadcrumbSchema, faqSchema, howToSchema, servicePageSchema } from '@/lib/schema';
 import { photoSrc } from '@/lib/images';
@@ -53,11 +53,11 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
     { name: p.H1, path: `/${e.slug}` },
   ];
   const rel = related(e, 8);
-  const isArea = !!p.area && p.area.name !== 'Rawalpindi';
+  const isArea = p.isArea;
   const nearbyLinks = isArea
     ? p.area!.nearby.map((n) => areas.find((a) => a.name === n && a.city === p.area!.city) || areas.find((a) => a.name === n)).filter(Boolean).map((a) => ({ a: a!, e: areaEntry(a!.name, a!.city) })).filter((x) => x.e)
     : [];
-  const cityList = p.city === 'Rawalpindi' ? rawalpindiAreas : p.nearMe ? [...islamabadAreas.slice(0, 10), ...rawalpindiAreas.slice(0, 8)] : islamabadAreas;
+  const cityList = p.nearMe ? [...areasOf('Islamabad').slice(0, 10), ...areasOf('Rawalpindi').slice(0, 8)] : p.cityAreaList;
   const waText = `Assalam o Alaikum HireCook.pk, I am interested in: ${p.H1}.`;
   const mapQ = encodeURIComponent(isArea ? `${p.area!.name}, ${p.area!.city}, Pakistan` : `${p.city.split(' & ')[0]}, Pakistan`);
 
@@ -87,7 +87,7 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
           <Photo k={p.image} priority alt={`${p.H1}: ${p.who} cooking`} sizes="(max-width: 820px) 100vw, 45vw" />
           <div className="float-card" style={{ left: 14, bottom: 14 }}>
             <span className="ic"><MapPin size={18} /></span>
-            <span>{isArea ? p.area!.name : p.city}<small>{isArea ? p.area!.kind : 'Islamabad & Rawalpindi'}</small></span>
+            <span>{isArea ? p.area!.name : p.city}<small>{isArea ? p.area!.kind : p.outside ? `${p.cityInfo.province} · male cooks` : 'Islamabad & Rawalpindi'}</small></span>
           </div>
         </div>
       </section>
@@ -100,6 +100,7 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
               <h2>Quick answer</h2>
               <p>{p.quickAnswer}</p>
             </div>
+            {p.outside && <p className="scope-note"><MapPin size={16} /> {p.scopeNote}</p>}
             <p style={{ marginTop: 18 }}>{p.localLine}</p>
           </Reveal>
           <Reveal delay={0.1}>
@@ -181,7 +182,7 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
         <div className="two-col">
           <Reveal>
             <p className="eyebrow">Local service</p>
-            <h2>{isArea ? `Cook services in ${p.area!.name}, ${p.area!.city}` : `Areas we cover${p.city.includes('&') ? '' : ' in ' + p.city}`}</h2>
+            <h2>{isArea ? `${p.outside ? 'Male cook' : 'Cook'} services in ${p.area!.name}, ${p.area!.city}` : `Areas we cover${p.city.includes('&') ? '' : ' in ' + p.city}`}</h2>
             {isArea ? (
               <>
                 <p>{p.area!.blurb}</p>

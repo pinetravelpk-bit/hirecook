@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import Brand from './Brand';
 import { site } from '@/lib/site';
-import { entries, groups, titleCase } from '@/lib/content';
+import { entries, coreGroups, titleCase } from '@/lib/content';
+import { cities } from '@/lib/cities';
 
 export default function Footer() {
   const popular = entries.filter((e) => e.group === 'Cook hiring').slice(0, 10);
@@ -23,7 +24,13 @@ export default function Footer() {
           <div>
             <h4>Categories</h4>
             <div className="foot-list">
-              {groups.map((g) => <Link key={g.slug} href={`/c/${g.slug}`}>{g.title}</Link>)}
+              {coreGroups.map((g) => <Link key={g.slug} href={`/c/${g.slug}`}>{g.title}</Link>)}
+            </div>
+          </div>
+          <div>
+            <h4>Cities</h4>
+            <div className="foot-list">
+              {cities.map((c) => <Link key={c.slug} href={`/c/${c.slug}`}>{c.full ? 'Cooks' : 'Male cooks'} in {c.name}</Link>)}
             </div>
           </div>
           <div>

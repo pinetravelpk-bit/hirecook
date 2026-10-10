@@ -11,7 +11,7 @@ export type Field = {
 export const leadStatuses = ['new', 'contacted', 'shortlisted', 'trial', 'hired', 'lost'] as const;
 export const clientStatuses = ['active', 'paused', 'ended'] as const;
 export const cookStatuses = ['available', 'placed', 'inactive'] as const;
-const cities = ['Islamabad', 'Rawalpindi'] as const;
+const cities = ['Islamabad', 'Rawalpindi', 'Karachi', 'Lahore', 'Faisalabad', 'Gujranwala', 'Peshawar', 'Multan', 'Hyderabad', 'Quetta'] as const;
 const schedules = ['Full-time', 'Part-time', 'Live-in', 'Live-out', 'Morning', 'Evening', 'Weekend', 'One-off event'] as const;
 
 export const entities = {

@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
   trailingSlash: false,
+  // Keep static generation light on memory (small VPS, 360+ pages).
+  experimental: { cpus: 2 },
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [360, 414, 640, 768, 1024, 1280, 1600],

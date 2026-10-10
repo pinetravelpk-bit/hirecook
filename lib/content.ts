@@ -1,12 +1,30 @@
 import raw from './keywords.json';
-import { findArea, type Area, islamabadAreas, rawalpindiAreas } from './areas';
+import { findArea, detectCity, areasOf, type Area } from './areas';
+import { cities, outsideCities, cityAreas, cityBy, isFullService, cityKeywordPrefixes, areaKeywordPrefixes } from './cities';
 import type { PhotoKey } from './images';
 import { site } from './site';
 
 export type Entry = { id: number; keyword: string; group: string; slug: string };
-export const entries = raw as Entry[];
+const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-export const groups = [
+// Male-cook pages for cities outside Islamabad / Rawalpindi, generated from lib/cities.ts.
+const cityEntries: Entry[] = [];
+let nextId = (raw as Entry[]).length + 1;
+for (const c of outsideCities) {
+  const group = `Male cooks in ${c.name}`;
+  for (const p of cityKeywordPrefixes) {
+    const keyword = `${p} ${c.name}`;
+    cityEntries.push({ id: nextId++, keyword, group, slug: slugify(keyword) });
+  }
+  cityAreas[c.name].forEach(([area], i) => {
+    const keyword = `${areaKeywordPrefixes[i % areaKeywordPrefixes.length]} ${area} ${c.name}`;
+    cityEntries.push({ id: nextId++, keyword, group, slug: slugify(keyword) });
+  });
+}
+
+export const entries: Entry[] = [...(raw as Entry[]), ...cityEntries];
+
+export const groups: { name: string; slug: string; title: string; intro: string }[] = [
   { name: 'Cook hiring', slug: 'cook-hiring', title: 'Cook Hiring Services in Islamabad', intro: 'Every way to hire a cook in Islamabad — home cooks, male cooks, domestic and family cooks, chefs, agencies and cooks near you.' },
   { name: 'Male cooks', slug: 'male-cooks', title: 'Male Cooks in Islamabad', intro: 'Experienced, trained male cooks for homes and families in Islamabad — full-time, part-time, live-in and live-out.' },
   { name: 'Schedules', slug: 'cook-schedules', title: 'Full-Time, Part-Time & Live-In Cooks', intro: 'Choose the schedule that suits your home: full-time, part-time, live-in, live-out, hourly, morning, evening or weekend cooks.' },
@@ -14,7 +32,14 @@ export const groups = [
   { name: 'Islamabad areas', slug: 'islamabad-areas', title: 'Cook Services by Islamabad Sector', intro: 'Hire a cook in your Islamabad sector or society — F, G, E and I sectors, Bahria, DHA, Gulberg, Bani Gala and more.' },
   { name: 'Rawalpindi areas', slug: 'rawalpindi-areas', title: 'Cook Services in Rawalpindi', intro: 'Hire a cook anywhere in Rawalpindi — Saddar, Satellite Town, Chaklala, Bahria Town phases, DHA, Askari and more.' },
   { name: 'Commercial and events', slug: 'commercial-and-events', title: 'Restaurant, Office & Event Cooks', intro: 'Cooks and chefs for restaurants, hotels, offices, canteens, messes, hostels, guest houses, weddings, parties and dawats.' },
-] as const;
+  ...outsideCities.map((c) => ({
+    name: `Male cooks in ${c.name}`,
+    slug: c.slug,
+    title: `Male Cooks in ${c.name}`,
+    intro: `Hire experienced male cooks across ${c.name}: home, full-time, part-time and live-in, in ${cityAreas[c.name].slice(0, 5).map((a) => a[0]).join(', ')} and more. ${c.blurb}`,
+  })),
+];
+export const coreGroups = groups.slice(0, 7);
 export const groupSlug = (g: string) => groups.find((x) => x.name === g)?.slug || 'cook-hiring';
 
 const KEEP = new Set(['BBQ', 'DHA', 'PWD', 'E-7', 'E-11']);
@@ -108,15 +133,29 @@ const COMMERCIAL_DAY = [{ label: 'Mise en place', h: 2 }, { label: 'Lunch servic
 const EVENT_DAY = [{ label: 'Menu & shopping', h: 2 }, { label: 'Prep & marination', h: 3 }, { label: 'Cooking', h: 4 }, { label: 'Serving', h: 2 }, { label: 'Clean-up', h: 1 }];
 const OFFICE_DAY = [{ label: 'Breakfast / tea', h: 1 }, { label: 'Lunch cooking', h: 3 }, { label: 'Serving', h: 1.5 }, { label: 'Evening tea', h: 0.5 }, { label: 'Cleaning & stock', h: 1.5 }];
 
-export type Page = ReturnType<typeof buildPage>;
+export type Page = ReturnType<typeof makePage>;
 
-export function buildPage(e: Entry) {
+// Pages are pure functions of the keyword, so build each one once per process.
+const pageCache = new Map<string, Page>();
+export function buildPage(e: Entry): Page {
+  let p = pageCache.get(e.slug);
+  if (!p) pageCache.set(e.slug, (p = makePage(e)));
+  return p;
+}
+
+function makePage(e: Entry) {
   const k = e.keyword.toLowerCase();
   const H1 = titleCase(e.keyword.replace(/\s+/g, ' ').trim());
   const area = findArea(e.keyword);
   const nearMe = /near me/.test(k);
-  const city = k.includes('rawalpindi') ? 'Rawalpindi' : nearMe ? 'Islamabad & Rawalpindi' : 'Islamabad';
-  const place = area && area.name !== 'Rawalpindi' ? `${area.name}, ${area.city}` : city;
+  const detected = detectCity(e.keyword);
+  const city = nearMe ? 'Islamabad & Rawalpindi' : detected;
+  const outside = !nearMe && !isFullService(detected);
+  const cityInfo = cityBy(detected)!;
+  const isArea = !!area && area.name !== area.city;
+  const place = isArea ? `${area!.name}, ${area!.city}` : city;
+  const cityAreaList = areasOf(detected);
+  const scopeNote = outside ? `In ${city}, HireCook.pk currently provides male cooks only: home, full-time, part-time and live-in. Chefs, restaurant, office and event staff are available in Islamabad and Rawalpindi.` : '';
   const role = ROLES.find((r) => r.re.test(k)) || COOK;
   const sched = SCHEDS.find((s) => s.re.test(k));
   const male = /\bmale\b/.test(k);
@@ -154,13 +193,15 @@ export function buildPage(e: Entry) {
         ? `For offices, canteens, messes, hostels and guest houses, our cooks deliver ${role.skill}, on time and on budget.`
         : `Every candidate is matched on ${role.skill}${sched ? `, a ${sched.label.toLowerCase()} schedule` : ''} and your family’s taste — ${pick(['less oil, more flavour', 'from simple daal-chawal to dawat-style qorma', 'spice levels the whole family enjoys', 'fresh roti with every meal'], e.slug)}.`;
 
-  const localLine = area
-    ? area.name === 'Rawalpindi'
-      ? `We cover all of Rawalpindi — ${rawalpindiAreas.slice(0, 8).map((a) => a.name).join(', ')} and more.`
-      : `${area.blurb}`
-    : city === 'Islamabad'
-      ? `We serve all Islamabad sectors and societies including F-6, F-7, F-10, G-11, E-11, I-8, Bahria Town, DHA and Gulberg Greens.`
-      : `We serve every major sector and society in Islamabad and Rawalpindi.`;
+  const localLine = isArea
+    ? area!.blurb
+    : area && area.name === 'Rawalpindi'
+      ? `We cover all of Rawalpindi: ${cityAreaList.slice(0, 8).map((a) => a.name).join(', ')} and more.`
+      : nearMe
+        ? 'We serve every major sector and society in Islamabad and Rawalpindi, plus male cooks in Karachi, Lahore, Faisalabad, Gujranwala, Peshawar, Multan, Hyderabad and Quetta.'
+        : city === 'Islamabad'
+          ? 'We serve all Islamabad sectors and societies including F-6, F-7, F-10, G-11, E-11, I-8, Bahria Town, DHA and Gulberg Greens.'
+          : `${cityInfo.blurb} We place male cooks in ${cityAreaList.slice(0, 8).map((a) => a.name).join(', ')} and more.`;
 
   // Group angle keeps near-identical keywords (e.g. "male cook in Islamabad" in two groups) distinct.
   const angle = {
@@ -171,14 +212,15 @@ export function buildPage(e: Entry) {
     'Islamabad areas': '',
     'Rawalpindi areas': '',
     'Commercial and events': ' Business clients get written terms, replacement support and trial shifts before confirming.',
-  }[e.group] || '';
+  }[e.group] ?? (outside ? ` In ${city} we currently provide male cooks only (home, full-time, part-time and live-in), matched to your family's taste and timings.` : '');
   const intro = `${opener} ${middle}${angle}`;
 
   const quickAnswer = `To ${H1.toLowerCase().startsWith('hire') ? H1.charAt(0).toLowerCase() + H1.slice(1) : 'hire a ' + who + ' in ' + place}, send your requirements (area, cuisine, family size, timings and budget) to HireCook.pk by WhatsApp, phone or the online form. We shortlist suitable ${whoPlural}, arrange a paid trial cook, and you hire once you are satisfied. Most families have a cook working within the same week.`;
 
   const facts: [string, string][] = [
     ['Service', H1],
-    ['Location', area && area.name !== 'Rawalpindi' ? `${area.name} (${area.kind}), ${area.city}` : city],
+    ['Location', isArea ? `${area!.name} (${area!.kind}), ${area!.city}` : city],
+    ...(outside ? [['Service scope', 'Male cooks only'] as [string, string]] : []),
     ['Cook type', titleCase(who)],
     ['Schedule', sched ? sched.label : 'Full-time, part-time, live-in or live-out'],
     ['Speciality', role.skill],
@@ -198,12 +240,12 @@ export function buildPage(e: Entry) {
         ? 'Event cooks are booked per event or per day. The charge depends on guest count, menu, number of dishes and whether helpers are needed.'
         : 'Choose full-time, part-time, live-in, live-out, morning, evening or weekend — whatever suits your home. Duties, timings and weekly off are agreed in writing before the cook starts.';
 
-  const checks = `Before introduction, we collect CNIC details and previous-employer references, and confirm the cook’s cooking experience. You then meet the cook and take a trial cook at your home. ${/verified|trained/.test(k) ? 'Ask us for the candidate’s verification and training details — we share what is on file so you can decide with confidence.' : 'We recommend police verification through your local police station / Islamabad Police (ICT) online portal for live-in staff.'}`;
+  const checks = `Before introduction, we collect CNIC details and previous-employer references, and confirm the cook’s cooking experience. You then meet the cook and take a trial cook at your home. ${/verified|trained/.test(k) ? 'Ask us for the candidate’s verification and training details — we share what is on file so you can decide with confidence.' : `For live-in staff we also recommend police verification through ${nearMe ? 'Islamabad Police (ICT) or Punjab Police' : cityInfo.police}.`}`;
 
   const why = [
     { t: 'Screened candidates', d: 'CNIC and reference checks before you meet anyone.' },
     { t: 'Trial cook first', d: 'Taste their food in your own kitchen before hiring.' },
-    { t: 'Local to you', d: `Cooks who can reach ${area && area.name !== 'Rawalpindi' ? area.name : city} on time.` },
+    { t: 'Local to you', d: `Cooks who can reach ${isArea ? area!.name : city} on time.` },
     { t: 'Clear written terms', d: 'Written duties, timings, off days and notice period.' },
     { t: 'Replacement support', d: 'If it does not work out, we help you find a replacement.' },
     { t: 'Fast shortlist', d: 'Profiles usually shared within 24–48 hours.' },
@@ -214,19 +256,21 @@ export function buildPage(e: Entry) {
     { q: `How quickly can a ${who} start in ${place}?`, a: `Most families receive suitable ${whoPlural} profiles within 24–48 hours. After an interview and a trial cook at your home, the cook can usually start the same week.` },
     { q: sched ? `What does a ${sched.label.toLowerCase()} cook do?` : commercial ? `What experience should a ${role.label} have?` : eventy ? `How many guests can one ${role.label} handle?` : `Should I hire a full-time or part-time cook?`, a: sched ? sched.text : commercial ? `Look for 3+ years in a similar kitchen, speed during rush hours, recipe consistency, hygiene habits and food-cost awareness. We verify past employers and can arrange a practical cooking trial.` : eventy ? `One experienced cook can usually handle 30–50 guests for a home dawat with a helper; for 100+ guests we recommend a head cook with 2–3 helpers. We plan staffing with your menu.` : `Full-time suits larger families who want all meals and groceries handled. Part-time (2–5 hours) suits couples and small families who mainly need lunch and dinner. We help you choose.` },
     { q: `Which dishes can the cook make?`, a: `Our ${whoPlural} commonly prepare ${role.dishes.slice(0, 6).join(', ')} and more. Share your favourite dishes and we match a cook who already makes them well.` },
-    { q: area && area.name !== 'Rawalpindi' ? `Do you provide cooks in ${area.name}, ${area.city}?` : nearMe ? 'How do I find a cook near me?' : `Which areas of ${city} do you cover?`, a: area && area.name !== 'Rawalpindi' ? `Yes. We place cooks in ${area.name} and nearby ${area.nearby.join(', ')}. Share your street or nearest landmark (e.g. ${area.landmarks[0]}) so we can match someone with a short commute.` : nearMe ? `Share your sector or society on WhatsApp. We match cooks who live nearby so they arrive on time every day — anywhere in Islamabad or Rawalpindi.` : `We cover ${city === 'Rawalpindi' ? rawalpindiAreas.slice(0, 10).map((a) => a.name).join(', ') : islamabadAreas.slice(0, 12).map((a) => a.name).join(', ')} and many more areas across the twin cities.` },
+    { q: isArea ? `Do you provide cooks in ${area!.name}, ${area!.city}?` : nearMe ? 'How do I find a cook near me?' : `Which areas of ${city} do you cover?`, a: isArea ? `Yes. We place ${outside ? 'male cooks' : 'cooks'} in ${area!.name} and nearby ${area!.nearby.join(', ')}. Share your street or nearest landmark (e.g. ${area!.landmarks[0]}) so we can match someone with a short commute.` : nearMe ? 'Share your sector or society on WhatsApp. We match cooks who live nearby so they arrive on time. All services in Islamabad and Rawalpindi, and male cooks in Karachi, Lahore, Faisalabad, Gujranwala, Peshawar, Multan, Hyderabad and Quetta.' : `We cover ${cityAreaList.slice(0, 12).map((a) => a.name).join(', ')} and more areas across ${city}.` },
     { q: 'Are the cooks background-checked?', a: checks },
     { q: male ? 'Why do families prefer male cooks?' : 'What if the cook does not suit us?', a: male ? 'Many households prefer male cooks for heavy-duty cooking, large dawats, tandoor/BBQ work and live-in roles. You can also specify age range, language and experience level.' : 'Tell us within the agreed period and we help arrange a replacement candidate. Clear written terms from day one keep things simple for both sides.' },
   ];
 
-  const image: PhotoKey = role.key === 'home' ? (male ? 'male-chef' : area ? (area.city === 'Rawalpindi' ? 'desi-spread' : 'hero-chef') : pick(['hero-chef', 'family-dinner', 'rice', 'desi-curry'] as PhotoKey[], e.slug)) : role.img;
+  if (outside) faqs.push({ q: `Which cook services are available in ${city}?`, a: scopeNote });
+
+  const image: PhotoKey = outside ? pick(['male-chef', 'chef-chopping', 'hero-chef', 'dough', 'busy-kitchen', 'chef-hat-cooking'] as PhotoKey[], e.slug) : role.key === 'home' ? (male ? 'male-chef' : area ? (area.city === 'Rawalpindi' ? 'desi-spread' : 'hero-chef') : pick(['hero-chef', 'family-dinner', 'rice', 'desi-curry'] as PhotoKey[], e.slug)) : role.img;
 
   const description = trim160(
-    `${H1}: ${intent === 'agency' ? 'trusted cook agency' : e.group === 'Male cooks' ? 'experienced male cook specialists' : e.group === 'Chefs and cuisines' ? 'skilled ' + role.label + ' specialists' : 'hire screened ' + whoPlural} for ${area && area.name !== 'Rawalpindi' ? area.name + ', ' + area.city : city}. ${sched ? sched.label + ' options, ' : ''}trial cook first. Call or WhatsApp HireCook.pk.`,
+    `${H1}: ${intent === 'agency' ? 'trusted cook agency' : e.group === 'Male cooks' ? 'experienced male cook specialists' : e.group === 'Chefs and cuisines' ? 'skilled ' + role.label + ' specialists' : 'hire screened ' + whoPlural} for ${isArea ? area!.name + ', ' + area!.city : city}. ${sched ? sched.label + ' options, trial' : 'Trial'} cook first. Call or WhatsApp HireCook.pk.`,
   );
   const title = trim60(`${H1} | ${pick(['Trusted Cooks', 'Screened Cooks', 'Hire in 48h', 'Trial First'], e.slug)} – HireCook.pk`, H1);
 
-  return { e, H1, title, description, area, city, place, role, sched, male, isChef, commercial, eventy, office, who, whoPlural, intro, localLine, quickAnswer, facts, day, dayTitle, scheduleText, checks, why, faqs, image, tasks: role.tasks, dishes: role.dishes, intent, nearMe };
+  return { outside, scopeNote, cityInfo, isArea, cityAreaList, e, H1, title, description, area, city, place, role, sched, male, isChef, commercial, eventy, office, who, whoPlural, intro, localLine, quickAnswer, facts, day, dayTitle, scheduleText, checks, why, faqs, image, tasks: role.tasks, dishes: role.dishes, intent, nearMe };
 }
 
 function trim160(s: string) {
@@ -249,7 +293,8 @@ export function related(e: Entry, n = 8) {
       if (q.role.key === p.role.key) s += 3;
       if (q.sched?.key && q.sched.key === p.sched?.key) s += 3;
       if (p.area && q.area && p.area.nearby.includes(q.area.name)) s += 5;
-      if (q.city === p.city) s += 1;
+      if (q.city === p.city) s += p.outside ? 8 : 1;
+      else if (p.outside || q.outside) s -= 6;
       if (q.male === p.male) s += 0.5;
       return { x, s: s + ((hash(e.slug + x.slug) % 100) / 1000) };
     })

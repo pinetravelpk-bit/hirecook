@@ -11,6 +11,7 @@ import HireForm from '@/components/HireForm';
 import { entries, groups, buildPage } from '@/lib/content';
 import { breadcrumbSchema } from '@/lib/schema';
 import { site } from '@/lib/site';
+import { cities } from '@/lib/cities';
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -49,6 +50,7 @@ export default async function GroupPage({ params }: { params: Promise<{ group: s
         <p className="eyebrow">{list.length} services</p>
         <h1>{g.title}</h1>
         <p className="lead">{g.intro}</p>
+        {cities.some((c) => c.slug === g.slug && !c.full) && <p className="scope-note" style={{ maxWidth: 820 }}>Outside Islamabad and Rawalpindi we currently provide male cooks only: home, full-time, part-time and live-in.</p>}
       </section>
       <section className="wrap" style={{ paddingBottom: 40 }}>
         <div className="grid-4">
@@ -74,7 +76,7 @@ export default async function GroupPage({ params }: { params: Promise<{ group: s
               {groups.filter((x) => x.slug !== g.slug).map((x) => <Link key={x.slug} className="chip" href={`/c/${x.slug}`}>{x.title}</Link>)}
             </div>
           </div>
-          <HireForm id="group-form" />
+          <HireForm id="group-form" city={cities.find((c) => c.slug === g.slug)?.name || 'Islamabad'} />
         </div>
       </section>
       <Cta />
