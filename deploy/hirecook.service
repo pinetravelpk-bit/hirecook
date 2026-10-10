@@ -1,0 +1,21 @@
+[Unit]
+Description=HireCook.pk Next.js site (hirecook.pk)
+After=network.target
+
+[Service]
+Type=simple
+User=hirecook
+Group=hirecook
+WorkingDirectory=/var/www/hirecook/current
+Environment=NODE_ENV=production
+Environment=PORT=3104
+EnvironmentFile=-/etc/hirecook/hirecook.env
+ExecStart=/usr/bin/node /var/www/hirecook/current/node_modules/next/dist/bin/next start -H 127.0.0.1 -p 3104
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=full
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

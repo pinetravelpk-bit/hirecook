@@ -24,18 +24,23 @@ npm install
 npm run dev
 ```
 
-## Deploy to the VPS (72.62.193.221)
+## Deployment (VPS 72.62.193.221, shared with other sites)
 
-1. Point DNS: create `A` records for `hirecook.pk` and `www.hirecook.pk` → `72.62.193.221`.
-2. SSH in as root and run:
+HireCook runs like the other Next.js sites on this server:
 
-   ```bash
-   curl -fsSL https://raw.githubusercontent.com/pinetravelpk-bit/hirecook/main/deploy/setup-vps.sh | bash
-   ```
+| What | Where |
+| --- | --- |
+| Code |  (owned by user ) |
+| Settings (phone, WhatsApp, admin key) |  |
+| Saved hire requests |  |
+| Service |  on  (copy in ) |
+| Nginx |  (copy in ) |
 
-   This installs Node 22, PM2, Nginx and Certbot, builds the site, runs it on port 3000 behind Nginx, and issues the SSL certificate.
-3. Edit `/var/www/hirecook/.env` (phone/WhatsApp), then run `bash /var/www/hirecook/deploy/deploy.sh`.
-4. Optional auto-deploy on every push: add the GitHub secrets `VPS_HOST`, `VPS_USER` and `VPS_SSH_KEY`. The workflow in `.github/workflows/deploy.yml` will run the deploy for you.
+To redeploy after pushing changes, run as root: . The  values are compiled in, so redeploy after editing the env file.
+
+For optional auto-deploy on every push, add the GitHub secrets ,  and .
+
+**DNS:**  uses Cloudflare. Its  records for  and  must point to . SSL comes from Let's Encrypt: .
 
 ## After launch
 
