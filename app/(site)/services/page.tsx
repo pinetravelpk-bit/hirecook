@@ -5,6 +5,8 @@ import JsonLd from '@/components/JsonLd';
 import Cta from '@/components/Cta';
 import { entries, groups, titleCase } from '@/lib/content';
 import { breadcrumbSchema } from '@/lib/schema';
+import LongForm from '@/components/LongForm';
+import { servicesArticle } from '@/lib/hub-content';
 
 export const metadata: Metadata = {
   title: 'All Cook & Chef Services: Islamabad & Rawalpindi | HireCook.pk',
@@ -22,6 +24,7 @@ export default function ServicesPage() {
       <h1>All cook services</h1>
       <p className="lead">Explore every cook type, cuisine, schedule and local area page across Islamabad and Rawalpindi.</p>
       <Directory items={entries.map((e) => ({ slug: e.slug, title: titleCase(e.keyword), group: e.group }))} groups={groups.map((g) => g.name)} />
+      <div style={{ marginInline: -20 }}><LongForm a={servicesArticle()} title="all cook services" /></div>
       <Cta />
     </main>
   );

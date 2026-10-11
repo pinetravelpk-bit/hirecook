@@ -6,7 +6,10 @@ import CityGrid from '@/components/CityGrid';
 import Cta from '@/components/Cta';
 import { cities } from '@/lib/cities';
 import { areasOf } from '@/lib/areas';
-import { breadcrumbSchema } from '@/lib/schema';
+import { breadcrumbSchema, faqSchema } from '@/lib/schema';
+import Faq from '@/components/Faq';
+import LongForm from '@/components/LongForm';
+import { citiesArticle } from '@/lib/hub-content';
 import { site } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -17,6 +20,7 @@ export const metadata: Metadata = {
 
 export default function CitiesPage() {
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Cities', path: '/cities' }];
+  const article = citiesArticle();
   const list = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -25,7 +29,7 @@ export default function CitiesPage() {
   };
   return (
     <main id="main">
-      <JsonLd data={[breadcrumbSchema(crumbs), list]} />
+      <JsonLd data={[breadcrumbSchema(crumbs), list, faqSchema(article.faqs)]} />
       <section className="wrap section" style={{ paddingBottom: 24 }}>
         <Breadcrumbs items={crumbs} />
         <p className="eyebrow">10 cities</p>
@@ -38,13 +42,12 @@ export default function CitiesPage() {
       <section className="wrap" style={{ paddingBottom: 40 }}>
         <CityGrid />
       </section>
-      <section className="wrap section prose" style={{ paddingTop: 0 }}>
-        <h2>Areas by city</h2>
-        {cities.map((c) => (
-          <p key={c.name}>
-            <Link href={`/c/${c.slug}`} style={{ color: 'var(--orange)', fontWeight: 700 }}>{c.name}</Link>: {areasOf(c.name).map((a) => a.name).join(', ')}.
-          </p>
-        ))}
+      <LongForm a={article} title="cooks across Pakistan" />
+      <section className="wrap section" style={{ paddingTop: 0 }}>
+        <div className="faq-grid">
+          <div><p className="eyebrow">FAQs</p><h2>Cities: common questions</h2></div>
+          <Faq items={article.faqs} />
+        </div>
       </section>
       <Cta />
     </main>

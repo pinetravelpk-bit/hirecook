@@ -12,6 +12,8 @@ import WaIcon from '@/components/WaIcon';
 import { DayDonut, HiringTimeline, CoverageBars } from '@/components/Infographics';
 import { CoverageMap, TrustRings } from '@/components/Coverage';
 import Registrations from '@/components/Registrations';
+import LongForm from '@/components/LongForm';
+import { homeArticle } from '@/lib/hub-content';
 import { site } from '@/lib/site';
 import { areas } from '@/lib/areas';
 import { cities } from '@/lib/cities';
@@ -298,6 +300,8 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      <LongForm a={homeArticle()} title="hiring a cook in Pakistan" />
 
       <Cta />
     </main>

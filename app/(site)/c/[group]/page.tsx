@@ -9,7 +9,10 @@ import JsonLd from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import HireForm from '@/components/HireForm';
 import { entries, groups, buildPage } from '@/lib/content';
-import { breadcrumbSchema } from '@/lib/schema';
+import { breadcrumbSchema, faqSchema } from '@/lib/schema';
+import Faq from '@/components/Faq';
+import LongForm from '@/components/LongForm';
+import { groupArticle } from '@/lib/hub-content';
 import { site } from '@/lib/site';
 import { cities } from '@/lib/cities';
 
@@ -36,6 +39,7 @@ export default async function GroupPage({ params }: { params: Promise<{ group: s
   if (!g) notFound();
   const list = entries.filter((e) => e.group === g.name).map(buildPage);
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }, { name: g.title, path: `/c/${g.slug}` }];
+  const article = groupArticle(g.slug);
   const itemList = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -44,7 +48,7 @@ export default async function GroupPage({ params }: { params: Promise<{ group: s
   };
   return (
     <main id="main">
-      <JsonLd data={[breadcrumbSchema(crumbs), itemList]} />
+      <JsonLd data={[breadcrumbSchema(crumbs), itemList, faqSchema(article.faqs)]} />
       <section className="wrap section" style={{ paddingBottom: 24 }}>
         <Breadcrumbs items={crumbs} />
         <p className="eyebrow">{list.length} services</p>
@@ -77,6 +81,13 @@ export default async function GroupPage({ params }: { params: Promise<{ group: s
             </div>
           </div>
           <HireForm id="group-form" city={cities.find((c) => c.slug === g.slug)?.name || 'Islamabad'} />
+        </div>
+      </section>
+      <LongForm a={article} title={g.title} />
+      <section className="wrap section" style={{ paddingTop: 0 }}>
+        <div className="faq-grid">
+          <div><p className="eyebrow">FAQs</p><h2>{g.title}: common questions</h2></div>
+          <Faq items={article.faqs} />
         </div>
       </section>
       <Cta />
