@@ -242,13 +242,14 @@ function makePage(e: Entry) {
 
   const checks = `Before introduction, we collect CNIC details and previous-employer references, and confirm the cook’s cooking experience. You then meet the cook and take a trial cook at your home. ${/verified|trained/.test(k) ? 'Ask us for the candidate’s verification and training details — we share what is on file so you can decide with confidence.' : `For live-in staff we also recommend police verification through ${nearMe ? 'Islamabad Police (ICT) or Punjab Police' : cityInfo.police}.`}`;
 
+  const v = (a: string[], salt: number) => pick(a, e.slug, salt);
   const why = [
-    { t: 'Screened candidates', d: 'CNIC and reference checks before you meet anyone.' },
-    { t: 'Trial cook first', d: 'Taste their food in your own kitchen before hiring.' },
-    { t: 'Local to you', d: `Cooks who can reach ${isArea ? area!.name : city} on time.` },
-    { t: 'Clear written terms', d: 'Written duties, timings, off days and notice period.' },
-    { t: 'Replacement support', d: 'If it does not work out, we help you find a replacement.' },
-    { t: 'Fast shortlist', d: 'Profiles usually shared within 24–48 hours.' },
+    { t: v(['Screened candidates', 'Verified background'], 11), d: v(['CNIC and reference checks before you meet anyone.', 'Identity and previous-employer checks come first.'], 12) },
+    { t: v(['Trial cook first', 'Taste before you hire'], 13), d: v(['Taste their food in your own kitchen before hiring.', `A paid trial in your ${commercial || office ? 'kitchen' : 'home'} shows real skill.`], 14) },
+    { t: v(['Local to you', 'Short commute'], 15), d: v([`Cooks who can reach ${isArea ? area!.name : city} on time.`, `We match ${whoPlural} living close to ${isArea ? area!.name : city}.`], 16) },
+    { t: v(['Clear written terms', 'Everything on paper'], 17), d: v(['Written duties, timings, off days and notice period.', 'Duties, hours, leave and notice agreed in writing.'], 18) },
+    { t: v(['Replacement support', 'Ongoing support'], 19), d: v(['If it does not work out, we help you find a replacement.', 'We stay in touch after placement and help if anything changes.'], 20) },
+    { t: v(['Fast shortlist', 'Profiles in 24–48h'], 21), d: v(['Profiles usually shared within 24–48 hours.', `Suitable ${whoPlural} shortlisted within one to two days.`], 22) },
   ];
 
   const faqs: { q: string; a: string }[] = [
@@ -270,7 +271,7 @@ function makePage(e: Entry) {
   );
   const title = trim60(`${H1} | ${pick(['Trusted Cooks', 'Screened Cooks', 'Hire in 48h', 'Trial First'], e.slug)} – HireCook.pk`, H1);
 
-  return { outside, scopeNote, cityInfo, isArea, cityAreaList, e, H1, title, description, area, city, place, role, sched, male, isChef, commercial, eventy, office, who, whoPlural, intro, localLine, quickAnswer, facts, day, dayTitle, scheduleText, checks, why, faqs, image, tasks: role.tasks, dishes: role.dishes, intent, nearMe };
+  return { outside, scopeNote, cityInfo, isArea, cityAreaList, e, H1, title, description, area, city, place, role, sched, male, isChef, commercial, eventy, office, who, whoPlural, intro, localLine, quickAnswer, facts, day, dayTitle, scheduleText, checks, why, faqs, image, tasks: seededShuffle(role.tasks, e.slug + "t"), dishes: seededShuffle(role.dishes, e.slug + "d"), intent, nearMe };
 }
 
 function trim160(s: string) {
@@ -308,3 +309,14 @@ export const areaEntry = (name: string, city: string) =>
     const a = findArea(x.keyword);
     return a && a.name === name && a.city === city;
   });
+
+function seededShuffle<T>(a: readonly T[], seed: string): T[] {
+  const b = [...a];
+  let h = hash(seed);
+  for (let i = b.length - 1; i > 0; i--) {
+    h = (Math.imul(h, 1103515245) + 12345) >>> 0;
+    const j = h % (i + 1);
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+}

@@ -13,6 +13,8 @@ import WaIcon from '@/components/WaIcon';
 import { DayDonut, HiringTimeline } from '@/components/Infographics';
 import { TrustRings } from '@/components/Coverage';
 import Registrations from '@/components/Registrations';
+import LongForm from '@/components/LongForm';
+import { buildArticle } from '@/lib/longform';
 import { entries, bySlug, buildPage, related, groups, groupSlug, areaEntry, titleCase } from '@/lib/content';
 import { areas, areasOf } from '@/lib/areas';
 import { site } from '@/lib/site';
@@ -54,6 +56,8 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
   ];
   const rel = related(e, 8);
   const isArea = p.isArea;
+  const article = buildArticle(p);
+  const allFaqs = [...p.faqs, ...article.faqs];
   const nearbyLinks = isArea
     ? p.area!.nearby.map((n) => areas.find((a) => a.name === n && a.city === p.area!.city) || areas.find((a) => a.name === n)).filter(Boolean).map((a) => ({ a: a!, e: areaEntry(a!.name, a!.city) })).filter((x) => x.e)
     : [];
@@ -63,7 +67,7 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
 
   return (
     <main id="main">
-      <JsonLd data={[...servicePageSchema(p), breadcrumbSchema(crumbs), faqSchema(p.faqs), howToSchema(`How to ${p.H1.toLowerCase().startsWith('hire') ? p.H1.toLowerCase() : 'hire a ' + p.who + ' in ' + p.place}`)]} />
+      <JsonLd data={[...servicePageSchema(p), breadcrumbSchema(crumbs), faqSchema(allFaqs), howToSchema(`How to ${p.H1.toLowerCase().startsWith('hire') ? p.H1.toLowerCase() : 'hire a ' + p.who + ' in ' + p.place}`)]} />
 
       {/* HERO */}
       <section className="wrap svc-hero">
@@ -175,6 +179,8 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
+      <LongForm a={article} title={p.H1} />
+
       <Registrations />
 
       {/* LOCAL */}
@@ -223,7 +229,7 @@ export default async function KeywordPage({ params }: { params: Promise<{ slug: 
             <p>Still unsure? Talk to us on WhatsApp. We reply quickly during working hours.</p>
             <a className="btn btn-wa" href={site.whatsappHref(waText)} target="_blank" rel="noopener"><WaIcon size={18} /> Ask on WhatsApp</a>
           </div>
-          <Faq items={p.faqs} />
+          <Faq items={allFaqs} />
         </div>
       </section>
 

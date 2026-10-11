@@ -452,3 +452,22 @@ html.js [data-reveal]:not([data-in]) { opacity: 0; transform: translateY(26px); 
 .city-card .tag.full { background: var(--green); }
 @media (max-width: 1080px) { .city-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 820px) { .city-grid.scroller { grid-auto-columns: 62%; } }
+
+/* Long-form guide */
+.lf-grid { display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
+.lf-toc { position: sticky; top: 100px; background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 18px; }
+.lf-toc ol { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 13.5px; }
+.lf-toc a { color: var(--green); font-weight: 600; }
+.lf-toc a:hover { color: var(--orange); }
+.lf-body { max-width: 780px; }
+.lf-body section { scroll-margin-top: 90px; }
+.lf-body h2 { margin-top: 1.3em; }
+.lf-body li { margin-bottom: 6px; color: var(--muted); }
+.lf-body li strong { color: var(--ink); }
+.lf-takeaways { background: var(--green); color: #fff; border-radius: 20px; padding: 22px 24px; }
+.lf-takeaways h2 { color: #fff; font-family: var(--sans); font-size: 17px; letter-spacing: 0; margin: 0 0 12px; display: flex; gap: 8px; align-items: center; }
+.lf-takeaways ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.lf-takeaways li { display: flex; gap: 10px; color: #e3ece6; margin: 0; }
+.lf-takeaways svg { color: #f4b08c; flex: none; margin-top: 4px; }
+.lf-table { overflow-x: auto; margin: 6px 0 14px; }
+@media (max-width: 1000px) { .lf-grid { grid-template-columns: 1fr; } .lf-toc { position: static; } }
