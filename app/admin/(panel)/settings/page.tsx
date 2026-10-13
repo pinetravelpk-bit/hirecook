@@ -7,7 +7,7 @@ const groups: { title: string; note?: string; fields: [string, string, string?][
   { title: 'Contact', note: 'Shown on every page and used by the Call / WhatsApp buttons.', fields: [['phone', 'Phone (as displayed)', '0339-1222233'], ['whatsapp', 'WhatsApp number (with country code)', '923391222233'], ['email', 'Email']] },
   { title: 'Office address (Google Business Profile must match exactly)', fields: [['street', 'Street / area'], ['locality', 'City'], ['region', 'Province'], ['postalCode', 'Postal code'], ['lat', 'Latitude'], ['lng', 'Longitude']] },
   { title: 'Opening hours', fields: [['hoursLabel', 'Hours (as displayed)'], ['opens', 'Opens (HH:MM)'], ['closes', 'Closes (HH:MM)']] },
-  { title: 'Footer & tracking', fields: [['poweredBy', 'Powered by (name)'], ['poweredByUrl', 'Powered by (link)'], ['gaId', 'Google Analytics ID (G-XXXX)'], ['gscVerification', 'Google Search Console verification code']] },
+  { title: 'Footer & tracking', fields: [['poweredBy', 'Powered by (name)'], ['poweredByUrl', 'Powered by (link)'], ['developedBy', 'Designed & developed by (name)'], ['developedByUrl', 'Designed & developed by (link)'], ['gaId', 'Google Analytics ID (G-XXXX)'], ['gscVerification', 'Google Search Console verification code']] },
 ];
 
 export default async function Settings({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {

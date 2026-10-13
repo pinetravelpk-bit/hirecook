@@ -51,7 +51,7 @@ export default function Header() {
     <>
       <div className="topbar">
         <div className="wrap">
-          <span><MapPin size={13} aria-hidden /> Cook hiring in Islamabad &amp; Rawalpindi · Male cooks in 8 more cities</span>
+          <a href={site.directionsUrl} target="_blank" rel="noopener"><MapPin size={13} aria-hidden /> {site.addressLine}, Pakistan</a>
           <span className="tb-right">
             <span><Clock size={13} aria-hidden /> {site.hoursLabel}</span>
             <a href={site.phoneHref}><Phone size={13} aria-hidden /> {site.phone}</a>
@@ -106,6 +106,10 @@ export default function Header() {
                   <Link key={href} href={href}><Icon size={24} aria-hidden />{label}</Link>
                 ))}
               </div>
+              <a className="sheet-address" href={site.directionsUrl} target="_blank" rel="noopener">
+                <MapPin size={18} aria-hidden />
+                <span><b>Visit our office</b>{site.addressLine}, Pakistan<small>{site.hoursLabel} · Get directions</small></span>
+              </a>
               <h4>Areas</h4>
               <div className="sheet-list">
                 <Link href="/c/islamabad-areas"><span><Landmark size={16} aria-hidden /> Islamabad sectors &amp; societies</span><ArrowRight size={16} /></Link>

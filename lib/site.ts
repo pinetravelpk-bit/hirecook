@@ -19,6 +19,8 @@ export const defaults = {
   lng: '73.0710',
   poweredBy: 'RX Direct',
   poweredByUrl: 'https://rxdirect.pk',
+  developedBy: 'Inventive Clicks',
+  developedByUrl: 'https://inventiveclicks.com/',
   gaId: '',
   gscVerification: 'NFmmn0NzU-UPKpUkxHzfm7mDhGRkVvEhBXGuz3RZzR0',
 };
@@ -68,11 +70,13 @@ export const site = {
   get geo() { return { lat: Number(getSettings().lat), lng: Number(getSettings().lng) }; },
   get hours() { const s = getSettings(); return { opens: s.opens, closes: s.closes, label: s.hoursLabel }; },
   get poweredBy() { return { name: getSettings().poweredBy, url: getSettings().poweredByUrl }; },
+  get developedBy() { return { name: getSettings().developedBy, url: getSettings().developedByUrl }; },
+  get directionsUrl() { return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${site.addressLine}, Pakistan`)}`; },
   social: [] as string[],
 };
 
 export function publicSite(): PublicSite {
-  return { name: site.name, phone: site.phone, phoneHref: site.phoneHref, whatsapp: site.whatsapp, email: site.email, hoursLabel: site.hours.label, addressLine: site.addressLine };
+  return { name: site.name, phone: site.phone, phoneHref: site.phoneHref, whatsapp: site.whatsapp, email: site.email, hoursLabel: site.hours.label, directionsUrl: site.directionsUrl, addressLine: site.addressLine };
 }
 
 export const registrations = [

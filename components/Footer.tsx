@@ -17,7 +17,7 @@ export default function Footer() {
             <div className="foot-list">
               <a href={site.phoneHref}><Phone size={14} aria-hidden /> {site.phone}</a>
               <a href={`mailto:${site.email}`}><Mail size={14} aria-hidden /> {site.email}</a>
-              <span><MapPin size={14} aria-hidden /> {site.addressLine}, Pakistan</span>
+              <a href={site.directionsUrl} target="_blank" rel="noopener"><MapPin size={14} aria-hidden /> {site.addressLine}, Pakistan (get directions)</a>
               <span><Clock size={14} aria-hidden /> {site.hours.label}</span>
             </div>
           </div>
@@ -60,7 +60,11 @@ export default function Footer() {
         </div>
         <div className="foot-bottom">
           <span>© {new Date().getFullYear()} {site.name}. Cook &amp; chef hiring in Islamabad and Rawalpindi.</span>
-          <span className="powered">Powered by <a href={site.poweredBy.url} target="_blank" rel="noopener">{site.poweredBy.name}</a></span>
+          <span className="powered">
+            Powered by <a href={site.poweredBy.url} target="_blank" rel="noopener">{site.poweredBy.name}</a>
+            <i aria-hidden> · </i>
+            Designed &amp; Developed by <a href={site.developedBy.url} target="_blank" rel="noopener">{site.developedBy.name}</a>
+          </span>
         </div>
       </div>
     </footer>

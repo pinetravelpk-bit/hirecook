@@ -471,3 +471,12 @@ html.js [data-reveal]:not([data-in]) { opacity: 0; transform: translateY(26px); 
 .lf-takeaways svg { color: #f4b08c; flex: none; margin-top: 4px; }
 .lf-table { overflow-x: auto; margin: 6px 0 14px; }
 @media (max-width: 1000px) { .lf-grid { grid-template-columns: 1fr; } .lf-toc { position: static; } }
+
+/* Office address & credits */
+.sheet-address { display: flex; gap: 12px; align-items: flex-start; background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-top: 16px; font-size: 14px; color: var(--ink); }
+.sheet-address svg { color: var(--orange); flex: none; margin-top: 2px; }
+.sheet-address b { display: block; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.sheet-address small { display: block; color: var(--orange); font-weight: 700; margin-top: 2px; }
+.powered { display: inline-flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.powered i { font-style: normal; opacity: .5; }
+@media (max-width: 820px) { .foot-bottom { flex-direction: column; } }

@@ -7,6 +7,7 @@ export type PublicSite = {
   email: string;
   hoursLabel: string;
   addressLine: string;
+  directionsUrl: string;
 };
 
 export const waLink = (whatsapp: string, text = 'Assalam o Alaikum HireCook.pk, I want to hire a cook.') =>
