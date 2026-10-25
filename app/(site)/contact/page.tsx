@@ -9,7 +9,7 @@ import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Contact HireCook.pk: Call or WhatsApp to Hire a Cook',
-  description: `Contact HireCook.pk in Islamabad. Call or WhatsApp ${site.phone}. ${site.hours.label}. Cook hiring for Islamabad and Rawalpindi.`,
+  description: `Contact HireCook.pk in Islamabad. Call ${site.phone} or WhatsApp ${site.whatsappDisplay}. ${site.hours.label}. Cook hiring for Islamabad and Rawalpindi.`,
   alternates: { canonical: '/contact' },
 };
 
@@ -27,7 +27,7 @@ export default function Contact() {
           <p className="lead">The fastest way to hire a cook is WhatsApp. We reply during working hours.</p>
           <ul className="ticks">
             <li><Phone size={18} /> <a href={site.phoneHref}><strong>{site.phone}</strong></a></li>
-            <li><WaIcon size={18} /> <a href={site.whatsappHref()} target="_blank" rel="noopener"><strong>WhatsApp {site.phone}</strong></a></li>
+            <li><WaIcon size={18} /> <a href={site.whatsappHref()} target="_blank" rel="noopener"><strong>WhatsApp {site.whatsappDisplay}</strong></a></li>
             <li><Mail size={18} /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
             <li><MapPin size={18} /> {site.address.street}, {site.address.locality} {site.address.postalCode}, Pakistan</li>
             <li><Clock size={18} /> {site.hours.label}</li>

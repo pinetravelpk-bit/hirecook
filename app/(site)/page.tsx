@@ -52,7 +52,7 @@ const cuisines: [string, string, PhotoKey][] = [
 ];
 
 const homeFaqs = [
-  { q: 'How can I hire a cook in Islamabad?', a: `Call or WhatsApp HireCook.pk on ${site.phone}, or fill in the online hire form. Share your area, cuisine, family size, timings and budget. We shortlist screened cooks within 24–48 hours, arrange a trial cook at your home, and you hire only when you are satisfied.` },
+  { q: 'How can I hire a cook in Islamabad?', a: `Call HireCook.pk on ${site.phone}, WhatsApp ${site.whatsappDisplay}, or fill in the online hire form. Share your area, cuisine, family size, timings and budget. We shortlist screened cooks within 24–48 hours, arrange a trial cook at your home, and you hire only when you are satisfied.` },
   { q: 'Is HireCook.pk a registered agency?', a: 'Yes. HireCook.pk is registered with SECP, holds an FBR tax registration (NTN), and is registered with the Labour Department and PESSI (Punjab Employees Social Security Institution).' },
   { q: 'Can I hire a male cook for my home?', a: 'Yes. Most of our home cooks are experienced male cooks who prepare daily desi food, roti, BBQ and dawat menus. You can choose full-time, part-time, live-in or live-out.' },
   { q: 'Do you provide cooks in Rawalpindi too?', a: 'Yes. We cover Saddar, Satellite Town, Chaklala, all Bahria Town phases, DHA, Askari societies, Westridge, Adiala Road and more across Rawalpindi.' },

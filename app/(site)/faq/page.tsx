@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const sections: { h: string; items: { q: string; a: string }[] }[] = [
   { h: 'Hiring', items: [
-    { q: 'How do I hire a cook through HireCook.pk?', a: `WhatsApp or call ${site.phone}, or submit the hire form. We shortlist screened cooks within 24–48 hours, arrange a trial cook, and you hire once satisfied.` },
+    { q: 'How do I hire a cook through HireCook.pk?', a: `Call ${site.phone}, WhatsApp ${site.whatsappDisplay}, or submit the hire form. We shortlist screened cooks within 24–48 hours, arrange a trial cook, and you hire once satisfied.` },
     { q: 'How quickly can a cook start?', a: 'Most families receive profiles within 24–48 hours and the cook starts within the same week after a successful trial.' },
     { q: 'Can I take a trial before hiring?', a: 'Yes. We strongly recommend a trial cook at your home so you can taste the food and see the cook\'s hygiene and working style.' },
     { q: 'Can I hire a cook near me?', a: 'Yes. We match cooks who live close to your sector or society in Islamabad or Rawalpindi so they arrive on time.' },

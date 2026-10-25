@@ -1,12 +1,12 @@
 import 'server-only';
 import { db } from './db';
-import { phoneToHref, toWhatsapp, waLink, type PublicSite } from './site-shared';
+import { phoneToHref, toWhatsapp, toWhatsappDisplay, waLink, type PublicSite } from './site-shared';
 
 // Business details. Defaults below; everything can be changed from Admin → Settings
 // (stored in the database). NAP must match your Google Business Profile exactly.
 export const defaults = {
   phone: '0339-1222233',
-  whatsapp: '923391222233',
+  whatsapp: '923221223666',
   email: 'info@hirecook.pk',
   street: 'Chandni Chowk, Murree Road',
   locality: 'Rawalpindi',
@@ -60,6 +60,7 @@ export const site = {
   get phoneIntl() { return phoneToHref(getSettings().phone).replace('tel:', ''); },
   get phoneHref() { return phoneToHref(getSettings().phone); },
   get whatsapp() { return toWhatsapp(getSettings().whatsapp || getSettings().phone); },
+  get whatsappDisplay() { return toWhatsappDisplay(site.whatsapp); },
   whatsappHref(text?: string) { return waLink(site.whatsapp, text); },
   get email() { return getSettings().email; },
   get address() {
@@ -76,7 +77,7 @@ export const site = {
 };
 
 export function publicSite(): PublicSite {
-  return { name: site.name, phone: site.phone, phoneHref: site.phoneHref, whatsapp: site.whatsapp, email: site.email, hoursLabel: site.hours.label, directionsUrl: site.directionsUrl, addressLine: site.addressLine };
+  return { name: site.name, phone: site.phone, phoneHref: site.phoneHref, whatsapp: site.whatsapp, whatsappDisplay: site.whatsappDisplay, email: site.email, hoursLabel: site.hours.label, directionsUrl: site.directionsUrl, addressLine: site.addressLine };
 }
 
 export const registrations = [

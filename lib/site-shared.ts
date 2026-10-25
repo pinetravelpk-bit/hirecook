@@ -4,6 +4,7 @@ export type PublicSite = {
   phone: string;
   phoneHref: string;
   whatsapp: string;
+  whatsappDisplay: string;
   email: string;
   hoursLabel: string;
   addressLine: string;
@@ -21,4 +22,10 @@ export const phoneToHref = (p: string) => {
 export const toWhatsapp = (p: string) => {
   const d = p.replace(/\D/g, '');
   return d.startsWith('0') ? '92' + d.slice(1) : d;
+};
+
+/** 923221223666 -> +92 322 1223666 */
+export const toWhatsappDisplay = (wa: string) => {
+  const d = wa.replace(/\D/g, '');
+  return d.startsWith('92') && d.length === 12 ? `+92 ${d.slice(2, 5)} ${d.slice(5)}` : '+' + d;
 };

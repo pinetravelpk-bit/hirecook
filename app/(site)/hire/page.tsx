@@ -32,7 +32,7 @@ export default function HirePage() {
           </div>
           <div className="actions">
             <a className="btn btn-green" href={site.phoneHref}><Phone size={18} /> {site.phone}</a>
-            <a className="btn btn-wa" href={site.whatsappHref()} target="_blank" rel="noopener"><WaIcon size={18} /> WhatsApp</a>
+            <a className="btn btn-wa" href={site.whatsappHref()} target="_blank" rel="noopener"><WaIcon size={18} /> {site.whatsappDisplay}</a>
           </div>
           <HiringTimeline />
         </div>
