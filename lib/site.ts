@@ -23,6 +23,8 @@ export const defaults = {
   developedByUrl: 'https://inventiveclicks.com/',
   gaId: '',
   gscVerification: 'NFmmn0NzU-UPKpUkxHzfm7mDhGRkVvEhBXGuz3RZzR0',
+  bingVerification: '',
+  socialLinks: '',
 };
 export type SettingKey = keyof typeof defaults;
 
@@ -73,7 +75,8 @@ export const site = {
   get poweredBy() { return { name: getSettings().poweredBy, url: getSettings().poweredByUrl }; },
   get developedBy() { return { name: getSettings().developedBy, url: getSettings().developedByUrl }; },
   get directionsUrl() { return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${site.addressLine}, Pakistan`)}`; },
-  social: [] as string[],
+  get social() { return getSettings().socialLinks.split(/[\s,]+/).filter((u) => /^https?:\/\//.test(u)); },
+  foundingDate: '2026',
 };
 
 export function publicSite(): PublicSite {

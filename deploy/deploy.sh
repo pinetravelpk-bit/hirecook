@@ -9,4 +9,5 @@ runuser -u hirecook -- bash -c 'set -a; . /etc/hirecook/hirecook.env; set +a; ex
 systemctl restart hirecook
 sleep 3
 curl -fsS -o /dev/null -w "hirecook: HTTP %{http_code}\n" http://127.0.0.1:3104/
+node scripts/indexnow.mjs || echo "IndexNow ping failed (non-fatal)"
 echo "Deployed $(runuser -u hirecook -- git rev-parse --short HEAD)"

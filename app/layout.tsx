@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = getSettings();
   return {
     metadataBase: new URL(site.url),
-    title: { default: 'Hire Cook in Islamabad & Rawalpindi | Male Cooks – HireCook.pk', template: '%s' },
+    title: { default: 'HireCook.pk – Hire a Cook in Islamabad & Rawalpindi', template: '%s' },
     description: 'Hire screened male cooks, home cooks & chefs in Islamabad and Rawalpindi. Full-time, part-time, live-in. Trial cook first, shortlist in 24–48h.',
     applicationName: site.name,
     keywords: ['hire cook in Islamabad', 'male cook Islamabad', 'home cook Islamabad', 'cook agency Islamabad', 'private chef Islamabad', 'hire cook in Rawalpindi', 'cook near me'],
@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ICBM: `${s.lat}, ${s.lng}`,
       'mobile-web-app-capable': 'yes',
     },
-    verification: { google: s.gscVerification || process.env.NEXT_PUBLIC_GSC_VERIFICATION || undefined },
+    verification: { google: s.gscVerification || process.env.NEXT_PUBLIC_GSC_VERIFICATION || undefined, other: s.bingVerification ? { 'msvalidate.01': s.bingVerification } : undefined },
   };
 }
 

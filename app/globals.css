@@ -480,3 +480,11 @@ html.js [data-reveal]:not([data-in]) { opacity: 0; transform: translateY(26px); 
 .powered { display: inline-flex; flex-wrap: wrap; gap: 4px; align-items: center; }
 .powered i { font-style: normal; opacity: .5; }
 @media (max-width: 820px) { .foot-bottom { flex-direction: column; } }
+
+/* Fact sheet */
+.facts-wide { grid-template-columns: repeat(3, 1fr); }
+.facts-wide div:nth-child(odd) { border-right: 0; }
+.facts-wide div { border-right: 1px solid var(--border); }
+.facts-wide a { color: var(--orange); }
+@media (max-width: 1000px) { .facts-wide { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 820px) { .facts-wide { grid-template-columns: 1fr; } .facts-wide div { border-right: 0; } }

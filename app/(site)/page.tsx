@@ -18,6 +18,7 @@ import { site } from '@/lib/site';
 import { areas } from '@/lib/areas';
 import { cities } from '@/lib/cities';
 import CityGrid from '@/components/CityGrid';
+import Facts from '@/components/Facts';
 import { islamabadAreas, rawalpindiAreas } from '@/lib/areas';
 import { entries, groups, coreGroups, areaEntry } from '@/lib/content';
 import { faqSchema, howToSchema } from '@/lib/schema';
@@ -162,6 +163,7 @@ export default function Home() {
       </section>
 
       <Registrations />
+      <Facts />
 
       {/* CUISINES */}
       <section className="wrap section" style={{ paddingTop: 0 }}>

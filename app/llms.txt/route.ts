@@ -11,7 +11,7 @@ export function GET() {
     `> ${site.description}`,
     '',
     '## Key facts',
-    `- Business: ${site.name}, cook & chef hiring agency`,
+    `- Business: ${site.name} (also known as HireCook, Hire Cook Pakistan), a registered cook & chef hiring agency, powered by ${site.poweredBy.name} (${site.poweredBy.url})`,
     `- Office: ${site.addressLine}, Pakistan`,
     '- Islamabad & Rawalpindi: all cook services (home cooks, male cooks, chefs, restaurant, office and event cooks) in 66 sectors and societies',
     '- Karachi, Lahore, Faisalabad, Gujranwala, Peshawar, Multan, Hyderabad, Quetta: male cooks only (home, full-time, part-time, live-in)',
